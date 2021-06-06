@@ -1,0 +1,5 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Sat Jun 22 13:06:34 ALMT 2019
+kalkancrypt-0.1.1.jar>=
+kalkancrypt-0.1.1.pom>nexus.idsoftware.kz=
+kalkancrypt-0.1.1.jar>nexus.idsoftware.kz=

@@ -1,0 +1,19 @@
+@import '~mdb-angular-ui-kit/assets/scss/mdb';
+@import "~bootstrap/dist/css/bootstrap.min.css";
+@import '~@fortawesome/fontawesome-free/scss/fontawesome.scss';
+@import '~@fortawesome/fontawesome-free/scss/solid.scss';
+@import '~@fortawesome/fontawesome-free/scss/regular.scss';
+@import '~@fortawesome/fontawesome-free/scss/brands.scss';
+@import '~ngx-toastr/toastr';
+
+@import '~mdb-angular-ui-kit/assets/scss/mdb.scss';
+
+@font-face {
+  font-family: Roboto;
+  src: url('~src/assets/fonts/Roboto-Medium.ttf');
+}
+
+body {
+  overflow-x: hidden;
+  font-family: 'Roboto', sans-serif!important;
+}

@@ -1,0 +1,55 @@
+<nav class="navbar navbar-expand-sm navbar-light bg-light" *ngIf="currentUser?.username">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
+            aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarScroll">
+      <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll home-ul bs-scroll-height">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#/home"><i class="fa fa-home"></i></a>
+        </li>
+      </ul>
+      <form class="d-flex">
+        <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll bs-scroll-height">
+          <li class="nav-item dropdown float-end">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdownLang" role="button"
+               data-bs-toggle="dropdown" aria-expanded="false">
+              {{this.langValue}}
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdownLang">
+              <li><a class="dropdown-item" (click)="onChange($event)" [id]="i.code"
+                     *ngFor="let i of this.util.getLang()">{{i.value}}</a></li>
+            </ul>
+          </li>
+        </ul>
+        <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll bs-scroll-height">
+          <li class="nav-item">
+            <a class="nav-link active" style="cursor: pointer" aria-current="page">{{currentUser?.branch?.id}} - {{currentUser?.username}}</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll bs-scroll-height">
+          <li class="nav-item">
+            <a class="nav-link active" style="cursor: pointer" aria-current="page" (click)="logout()"><i
+              class="fa fa-sign-out-alt fa-1x"></i></a>
+          </li>
+        </ul>
+        <!--        <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll bs-scroll-height">-->
+        <!--          <li class="nav-item dropdown float-end">-->
+        <!--            <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button"-->
+        <!--               data-bs-toggle="dropdown" aria-expanded="false">-->
+        <!--              Профиль-->
+        <!--            </a>-->
+        <!--            <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown" style="left: -60px">-->
+        <!--              <li><a class="dropdown-item" href="#/systems">Добавить систему</a></li>-->
+        <!--              <li>-->
+        <!--                <hr class="dropdown-divider">-->
+        <!--              </li>-->
+        <!--              <li><a class="dropdown-item" (click)="logout()">Выход</a></li>-->
+        <!--            </ul>-->
+        <!--          </li>-->
+        <!--        </ul>-->
+      </form>
+    </div>
+  </div>
+</nav>

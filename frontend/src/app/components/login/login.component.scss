@@ -1,0 +1,89 @@
+html, body, app-root {
+  height: 100%;
+  margin: 10px;
+}
+
+.cursor-pointer {
+  cursor: pointer!important;
+}
+
+.main-block {
+  position: fixed;
+  min-width: 100%;
+  min-height: 100%;
+  background-image: url('../../../assets/images/2308-min.jpg');
+  background-repeat: no-repeat;
+  background-size: 1920px 1080px;
+  background-position: center;
+}
+@function black($opacity) {
+  @return rgba(black, $opacity)
+}
+@function white($opacity) {
+  @return rgba(white, $opacity)
+}
+.main-block-dark {
+  position: fixed;
+  min-width: 100%;
+  min-height: 100%;
+  background: black(0.9);
+}
+
+.hidden-router {
+  flex: 1 1 auto;
+  display: flex;
+  overflow: hidden;
+}
+
+.main-section-block {
+  max-width: 30rem;
+  border-radius: 5px;
+  background-color: #ffffff !important;
+  z-index: 1;
+}
+
+.montserrat-label {
+  font-size: 1rem;
+  color: #1a1a1a;
+  text-align: left;
+  margin-left: 2rem;
+}
+
+.montserrat-icon {
+  transform: scale(1.5, 1.4);
+  margin: 8px;
+}
+
+.enter-btn {
+  background-color: #00b2a8;
+  outline-color: #00b2a8;
+  border-color: #00b2a8;
+}
+
+.aquaColor {
+  color: #00b2a8;
+}
+
+.vitrina {
+  font-size: 1.2rem;
+  color: #0d0d0d;
+}
+
+.panel-header:active, .panel-header:focus, .nav-tabs .nav-link.active, .nav-item.show .nav-link, .badge:active {
+  border: 0;
+  border-bottom: 2px solid #00b2a8;
+}
+
+.input-group-text {
+  background-color: transparent ;
+  border-left: none;
+}
+
+.input-group>.custom-select:not(:last-child), .input-group>.form-control:not(:last-child) {
+  border-right: white;
+}
+
+.errText {
+  font-size: 10px;
+  margin-top: -5px;
+}

@@ -1,0 +1,26 @@
+image: maratkalibek/aptly
+
+stages:
+  - compile
+  - install
+#  - undeploy
+  - deploy
+
+compile:
+  stage: compile
+  script:
+    - mvn compile -U
+run:
+  stage: install
+  script:
+    - mvn clean package install -U
+
+#undeploy:
+#  stage: undeploy
+#  script:
+#    - mvn tomcat7:undeploy
+
+deploy:
+  stage: deploy
+  script:
+    - mvn tomcat7:redeploy

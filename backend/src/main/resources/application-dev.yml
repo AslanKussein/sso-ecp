@@ -1,0 +1,28 @@
+server:
+  http2:
+    enabled: true
+  error:
+    include-stacktrace: always
+    include-message: always
+  session:
+    tracking-modes: cookie
+  servlet:
+    context-path: /sso
+    encoding:
+      force-response: true
+      charset: UTF-8
+spring.jpa:
+  database: oracle
+  show-sql: false
+  open-in-view: false
+spring.datasource:
+  platform: oracle
+  driverClassName: oracle.jdbc.OracleDriver
+  url: jdbc:oracle:thin:@//172.16.17.65:1521/PV10
+  username: solidary
+  password: A123456a
+auth:
+  jwt:
+    secret: javamaster
+    expirationSeconds: 1000
+    expirationRefreshDay: 1

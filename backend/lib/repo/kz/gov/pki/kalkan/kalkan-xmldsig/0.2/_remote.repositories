@@ -1,0 +1,5 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Sat Jun 22 13:07:13 ALMT 2019
+kalkan-xmldsig-0.2.jar>=
+kalkan-xmldsig-0.2.jar>nexus.idsoftware.kz=
+kalkan-xmldsig-0.2.pom>nexus.idsoftware.kz=

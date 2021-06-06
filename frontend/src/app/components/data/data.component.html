@@ -1,0 +1,53 @@
+<section class="block">
+  <div class="card row">
+    <h5 class="title" translate>header.mainTitle</h5>
+    <div class="col-sm-1"></div>
+    <div class="col-sm">
+      <ul class="nav nav-tabs mb-3" id="ex1" role="tablist">
+        <li class="nav-item" role="presentation">
+          <a class="nav-link" data-mdb-toggle="tab" [ngClass]="selectedTab == 1 ? 'active' : ''"
+             role="tab" (click)="changeTab(1)" aria-controls="ex1-tabs-1" aria-selected="true" translate>
+            data.availableSystems
+          </a>
+        </li>
+        <li class="nav-item" role="presentation">
+          <a class="nav-link" [ngClass]="selectedTab == 2 ? 'active' : ''" data-mdb-toggle="tab"
+             role="tab" (click)="changeTab(2)" aria-controls="ex1-tabs-2" aria-selected="false" translate>
+            data.settings
+          </a>
+        </li>
+        <li class="nav-item" role="presentation">
+          <a class="nav-link" [ngClass]="selectedTab == 3 ? 'active' : ''" data-mdb-toggle="tab"
+             role="tab" (click)="changeTab(3)" aria-controls="ex1-tabs-3" aria-selected="false" translate>
+            data.dictionary
+          </a>
+        </li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane fade" [ngClass]="selectedTab == 1 ? 'active show' : ''" id="ex1-tabs-1"
+             role="tabpanel" aria-labelledby="ex1-tab-1">
+          <div class="row system-list">
+            <div class="col-sm"></div>
+            <div class="col-sm" *ngFor="let obj of systems">
+              <div class="card text-center system-item" (click)="redirect(obj.url)">
+                <div class="card-body">
+                  <p class="card-text">{{obj.name}}</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm"></div>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="ex1-tabs-2" [ngClass]="selectedTab == 2 ? 'active show' : ''" role="tabpanel"
+             aria-labelledby="ex1-tab-2">
+          Tab 2 content
+        </div>
+        <div class="tab-pane fade" [ngClass]="selectedTab == 3 ? 'active show' : ''" id="ex1-tabs-3" role="tabpanel"
+             aria-labelledby="ex1-tab-3">
+          Tab 3 content
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-1"></div>
+  </div>
+</section>
