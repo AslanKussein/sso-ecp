@@ -37,41 +37,30 @@ public class SignServiceImpl implements SignService {
     public UserTokenState sign(final LocalValue language, final LoginRequestDto loginRequest) {
         Authentication authentication;
 
-        if (StringUtils.isEmpty(loginRequest.getCertificate())) {
-            throw BadRequestException.chooseEsp(language);
-        }
+        validate(loginRequest, language);
 
-        if (StringUtils.isEmpty(loginRequest.getUsername()) && StringUtils.isEmpty(loginRequest.getPassword())) {
-            throw BadRequestException.emptyLoginOrPassword(language);
-        }
-
-        final Users users = getUserNameByEds(loginRequest.getCertificate(), language);
-
-        if (!users.getUsername().equalsIgnoreCase(loginRequest.getUsername())) {
-            throw BadRequestException.userNotEqualsEcpUser(language);
-        }
-
-        UserDetails userDetails = loadUserByUsername(language, loginRequest.getUsername());
+        final UserDetails userDetails = loadUserByUsername(language, loginRequest.getUsername());
 
         authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword(), userDetails.getAuthorities()));
+                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword(), userDetails.getAuthorities())
+        );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        CurrentUser currentUser = (CurrentUser) authentication.getPrincipal();
+        final CurrentUser currentUser = (CurrentUser) authentication.getPrincipal();
 
         return tokenUtil.generateToken(currentUser.getUser().getEmpId().toString(), currentUser.getUser().getUsername());
     }
 
     private UserDetails loadUserByUsername(final LocalValue localValue, final String username) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         if (isNull(userDetails)) {
             throw NotFoundException.userNotFound(localValue, username);
         }
         return userDetails;
     }
 
-    private Users getUserNameByEds(final String certificate, final LocalValue language) {
+    private Users getUserByEds(final String certificate, final LocalValue language) {
         EDSUtil edsUtil = new EDSUtil();
         EDSInfoGson edsInfo = edsUtil.getInfo(certificate);
 
@@ -88,5 +77,21 @@ public class SignServiceImpl implements SignService {
         }
 
         return usersRepository.findByUserDetail_Iin(edsInfo.getIin());
+    }
+
+    private void validate(final LoginRequestDto loginRequest, final LocalValue language) {
+        if (StringUtils.isEmpty(loginRequest.getCertificate())) {
+            throw BadRequestException.chooseEsp(language);
+        }
+
+        if (StringUtils.isEmpty(loginRequest.getUsername()) && StringUtils.isEmpty(loginRequest.getPassword())) {
+            throw BadRequestException.emptyLoginOrPassword(language);
+        }
+
+        final Users users = getUserByEds(loginRequest.getCertificate(), language);
+
+        if (!users.getUsername().equalsIgnoreCase(loginRequest.getUsername())) {
+            throw BadRequestException.userNotEqualsEcpUser(language);
+        }
     }
 }

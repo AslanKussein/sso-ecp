@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.io.Serial;
 import java.io.Serializable;
 
 @EqualsAndHashCode()
@@ -14,6 +15,10 @@ import java.io.Serializable;
 @Entity
 @Table(name = "USER_DETAIL", schema = "websecurity")
 public class UserDetail implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     @Id
     private String id;
     @JsonIgnore

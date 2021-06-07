@@ -1,9 +1,7 @@
 package kz.crtr.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serial;
@@ -23,6 +21,7 @@ public class Users implements Serializable {
     @Column(name = "u_name")
     private String username;
     @JsonIgnore
+    @Basic(fetch = FetchType.LAZY)
     @Column(name = "u_password")
     private String password;
     private Integer block;
@@ -40,10 +39,9 @@ public class Users implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Users)) {
+        if (!(object instanceof Users other)) {
             return false;
         }
-        Users other = (Users) object;
         return (this.getEmpId() != null || other.getEmpId() == null) && (this.getEmpId() == null || this.empId.equals(other.empId));
     }
 

@@ -20,8 +20,8 @@ public class UserServiceImpl implements UserService {
     private final UsersRepository usersRepository;
 
     @Override
-    public UserDto findUserByName(String username) {
-        Users users = usersRepository.findByUsernameIgnoreCase(username);
+    public UserDto findUserByName(final String username) {
+        final Users users = usersRepository.findByUsernameIgnoreCase(username);
 
         UserDto.UserDtoBuilder userDtoBuilder = UserDto.builder()
                 .empId(users.getEmpId())
@@ -36,11 +36,11 @@ public class UserServiceImpl implements UserService {
         return userDtoBuilder.build();
     }
 
-    private String buildFullName(UserDetail userDetail) {
+    private String buildFullName(final UserDetail userDetail) {
         return new StringJoiner(" ").add(userDetail.getFirstname()).add(userDetail.getLastname()).add(userDetail.getMiddlename()).toString();
     }
 
-    private Set<String> getUserAvailableSystem(Long empId) {
+    private Set<String> getUserAvailableSystem(final Long empId) {
 
         return Set.of("em5");
     }
