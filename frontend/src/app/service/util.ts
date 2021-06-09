@@ -68,6 +68,10 @@ export class Util {
     localStorage.removeItem(key);
   }
 
+  getCurLang() {
+    return this.nvl(this.getItem('lang'), 'ru')
+  }
+
   getError() {
     let fieldName;
     switch (this._language.language) {

@@ -1,6 +1,7 @@
 package kz.crtr.util;
 
 import io.jsonwebtoken.*;
+import kz.crtr.dto.PublicKeyDto;
 import kz.crtr.dto.UserTokenState;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,8 +44,23 @@ public class JwtTokenUtil {
                 .accessToken(compact)
                 .expiresIn(expiry)
                 .username(login)
+                .active(Boolean.TRUE)
                 .refreshToken(refreshToken(compact))
                 .empId(Long.parseLong(empId))
+                .build();
+    }
+
+    public UserTokenState getUserTokenState(String token) {
+
+        Claims claims = getAllClaimsFromToken(token);
+
+        return UserTokenState.builder()
+                .accessToken(token)
+                .active(validateToken(token))
+                .expiresIn(claims.getExpiration())
+                .username(getUserName(token))
+                .refreshToken(refreshToken(token))
+                .empId(Long.parseLong(getUserIdFromJWT(token)))
                 .build();
     }
 
@@ -151,5 +167,15 @@ public class JwtTokenUtil {
             claims = null;
         }
         return claims;
+    }
+
+    public PublicKeyDto getPublicKey(final HttpServletRequest request) {
+        if (validateToken(getJwtFromRequest(request))) {
+            return PublicKeyDto.builder()
+                    .key(SECRET)
+                    .algorithm("HmacSHA256")
+                    .build();
+        }
+        return null;
     }
 }

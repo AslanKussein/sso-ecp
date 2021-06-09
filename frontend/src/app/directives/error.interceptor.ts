@@ -28,7 +28,7 @@ export class ErrorInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(catchError(err => {
       this.ngxLoader.stop();
-      if (err.status === 401) {
+      if (err.status === 401 && !window.location.href.includes('login')) {
         return this.handle401Error(request, next);
       } else if (err.status === 400) {
         if (err.url.includes(this.configService.authUrl)) {
@@ -74,7 +74,7 @@ export class ErrorInterceptor implements HttpInterceptor {
           request = request.clone({
             setHeaders: {
               Authorization: `Bearer ${token.accessToken}`,
-              lang: <string>this.util.getItem('lang')
+              lang: this.util.getCurLang()
             }
           });
           return next.handle(request);
@@ -88,7 +88,7 @@ export class ErrorInterceptor implements HttpInterceptor {
           request = request.clone({
             setHeaders: {
               Authorization: `Bearer ${jwt}`,
-              lang: <string>this.util.getItem('lang')
+              lang: this.util.getCurLang()
             }
           });
           return next.handle(request);

@@ -23,6 +23,6 @@ spring.datasource:
   password: A123456a
 auth:
   jwt:
-    secret: javamaster
+    secret: 138BQYF9Z3eukz9N8wXmAy.g6KpriWigGyO7LLYhV8N@2MU9g1cEy52ZVsQiMWPr
     expirationSeconds: 1000
     expirationRefreshDay: 1

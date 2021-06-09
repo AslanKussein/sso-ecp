@@ -12,6 +12,10 @@ public class BadRequestException extends DetailedException {
         log.error(description);
     }
 
+    public static BadRequestException emptyRefreshToken(LocalValue language) {
+        return new BadRequestException(BundleMessageUtil.getLocaledValue(language, "empty.refresh.token"));
+    }
+
     public static BadRequestException chooseEsp(LocalValue language) {
         return new BadRequestException(BundleMessageUtil.getLocaledValue(language, "error.ecp.not.choose"));
     }

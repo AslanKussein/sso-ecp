@@ -7,7 +7,6 @@ import kz.crtr.dto.ErrorDto;
 import kz.crtr.dto.LocalValue;
 import kz.crtr.dto.UserTokenState;
 import kz.crtr.service.SignService;
-import kz.crtr.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -20,12 +19,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/open-api/auth", produces = MediaType.APPLICATION_JSON_VALUE)
 public class SignRestController {
     private final SignService signService;
-    private final JwtTokenUtil tokenUtil;
 
     @ApiOperation(value = "", notes = "authorize and generate token", response = UserTokenState.class, tags = {})
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = UserTokenState.class),
-            @ApiResponse(code = 401, message = "Unauthorized", response = UserTokenState.class),
+            @ApiResponse(code = 401, message = "Unauthorized", response = ErrorDto.class),
             @ApiResponse(code = 400, message = "Internal Server Error", response = ErrorDto.class)})
     @PostMapping("/login")
     public ResponseEntity<UserTokenState> login(@RequestHeader final LocalValue lang,
@@ -36,14 +34,17 @@ public class SignRestController {
     @ApiOperation(value = "", notes = "update expired token using resfresh token", response = UserTokenState.class, tags = {})
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = UserTokenState.class),
-            @ApiResponse(code = 400, message = "Refresh token not correct", response = ErrorDto.class)})
+            @ApiResponse(code = 500, message = "Refresh token not correct", response = ErrorDto.class)})
     @PostMapping("/refreshToken")
-    public ResponseEntity<UserTokenState> refreshToken(@RequestBody final RefreshTokenRequestDto dto) {
-        try {
-            UserTokenState userTokenState = tokenUtil.generateToken(tokenUtil.getUserIdFromJWT(dto.getRefreshToken()), tokenUtil.getUserName(dto.getRefreshToken()));
-            return ResponseEntity.ok(userTokenState);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<UserTokenState> refreshToken(@RequestHeader final LocalValue lang,
+                                                       @RequestBody final RefreshTokenRequestDto dto) {
+        return ResponseEntity.ok(signService.refreshToken(dto, lang));
+    }
+
+
+    @ApiOperation(value = "", notes = "check validate jwt token", response = UserTokenState.class)
+    @PostMapping("/validateToken")
+    public ResponseEntity<UserTokenState> validateToken(@RequestBody final TokenRequestDto dto) {
+        return ResponseEntity.ok(signService.validateToken(dto));
     }
 }

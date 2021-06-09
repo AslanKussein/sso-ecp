@@ -14,5 +14,5 @@ public interface UsersRepository extends JpaRepository<Users, Long> {
 
     Users findByUsernameIgnoreCase(final String username);
 
-    Users findByUserDetail_Iin(final String iin);
+    Users findByUserDetail_IinAndBlockNot(final String iin, final Integer block);
 }

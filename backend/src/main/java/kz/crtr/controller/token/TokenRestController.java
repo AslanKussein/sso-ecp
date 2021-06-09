@@ -1,7 +1,11 @@
 package kz.crtr.controller.token;
 
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.Authorization;
+import kz.crtr.dto.ErrorDto;
+import kz.crtr.dto.PublicKeyDto;
 import kz.crtr.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,12 +43,16 @@ public class TokenRestController {
         return ResponseEntity.noContent().build();
     }
 
-    @ApiOperation(value = "", notes = "check validate jwt token", response = Boolean.class, authorizations = {
+
+    @ApiOperation(value = "", notes = "get public key and sigh algorithm", response = PublicKeyDto.class, authorizations = {
             @Authorization(value = "bearer-key")}, tags = {}
     )
-    @PostMapping("/validateToken")
-    public ResponseEntity<Boolean> validateToken(HttpServletRequest request) {
-        String jwt = tokenUtil.getJwtFromRequest(request);
-        return ResponseEntity.ok(tokenUtil.validateToken(jwt));
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = PublicKeyDto.class),
+            @ApiResponse(code = 401, message = "Unauthorized", response = ErrorDto.class),
+            @ApiResponse(code = 400, message = "Internal Server Error", response = ErrorDto.class)})
+    @PostMapping("/tokenKey")
+    public ResponseEntity<PublicKeyDto> getTokenKey(HttpServletRequest request) {
+        return ResponseEntity.ok(tokenUtil.getPublicKey(request));
     }
 }

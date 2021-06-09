@@ -62,6 +62,9 @@ export class AuthenticationService implements OnDestroy {
           }));
         },
         res => {
+          if (res == 'Bad credentials') {
+            res = 'asd'
+          }
           this.notifyService.showError('', res)
         }));
   }
@@ -69,7 +72,7 @@ export class AuthenticationService implements OnDestroy {
   loginIDP(loginForm: any) {
     let headers = new HttpHeaders();
     headers = headers.set('Content-Type', 'application/json')
-    headers = headers.set('lang', <string>this.util.getItem('lang'));
+    headers = headers.set('lang', this.util.getCurLang());
 
     return this.http.post<any>(`${this.configService.authUrl}`.concat('/login'), {
       username: loginForm.username,
@@ -86,11 +89,18 @@ export class AuthenticationService implements OnDestroy {
   }
 
   refreshToken() {
-    this.options.headers.set('lang', <string>this.util.getItem('lang'));
-    return this.http.post<any>(`${this.configService.authUrl}`.concat('/refreshToken'), {refreshToken: <string>this.getRefreshToken()}, this.options)
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json')
+    headers = headers.set('lang', this.util.getCurLang());
+
+    this.options.headers.set('lang', this.util.getCurLang());
+    return this.http.post<any>(`${this.configService.authUrl}`.concat('/refreshToken'), {refreshToken: <string>this.getRefreshToken()}, {headers: headers})
       .pipe(tap((tokens: User) => {
-        this.storeTokens(tokens);
-      }));
+          this.storeTokens(tokens);
+        },
+        res => {
+          this.logout();
+        }));
   }
 
   logout() {

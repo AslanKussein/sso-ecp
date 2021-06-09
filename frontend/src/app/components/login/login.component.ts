@@ -44,6 +44,22 @@ export class LoginComponent implements OnInit {
     this.modalRef = this.modalService.show(template);
   }
 
+  selectTab(tabId: number): void {
+    this.selectedTab = tabId;
+    this.ngControl();
+  }
+
+  ngControl() {
+    this.setValidator('username', this.selectedTab == 1 ? Validators.required : Validators.nullValidator);
+    this.setValidator('password', this.selectedTab == 1 ? Validators.required : Validators.nullValidator);
+    this.setValidator('certificate', this.selectedTab == 2 ? Validators.required : Validators.nullValidator);
+  }
+
+  setValidator(code: string, validator: any) {
+    this.loginForm.controls[code].setValidators([validator]);
+    this.loginForm.controls[code].updateValueAndValidity();
+  }
+
   ngOnInit(): void {
     this.mySelect - this.util.getLang();
     this.loginForm = this.formBuilder.group({
@@ -79,6 +95,13 @@ export class LoginComponent implements OnInit {
   login() {
     this.ngxLoader.startBackground()
     this.submitted = true;
+    if (this.selectedTab == 1) {
+      this.loginForm.value.certificate = null;
+    }
+    if (this.selectedTab == 2) {
+      this.loginForm.value.username = null;
+      this.loginForm.value.password = null;
+    }
 
     this.authenticationService.login(this.loginForm);
 

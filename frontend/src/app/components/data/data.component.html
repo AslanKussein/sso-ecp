@@ -27,7 +27,6 @@
         <div class="tab-pane fade" [ngClass]="selectedTab == 1 ? 'active show' : ''" id="ex1-tabs-1"
              role="tabpanel" aria-labelledby="ex1-tab-1">
           <div class="row system-list">
-            <div class="col-sm"></div>
             <div class="col-sm" *ngFor="let obj of systems">
               <div class="card text-center system-item" (click)="redirect(obj.url)">
                 <div class="card-body">
@@ -35,7 +34,6 @@
                 </div>
               </div>
             </div>
-            <div class="col-sm"></div>
           </div>
         </div>
         <div class="tab-pane fade" id="ex1-tabs-2" [ngClass]="selectedTab == 2 ? 'active show' : ''" role="tabpanel"

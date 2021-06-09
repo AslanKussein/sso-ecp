@@ -1,6 +1,8 @@
 package kz.crtr.service.impl;
 
 import kz.crtr.controller.token.LoginRequestDto;
+import kz.crtr.controller.token.RefreshTokenRequestDto;
+import kz.crtr.controller.token.TokenRequestDto;
 import kz.crtr.dto.EDSInfoGson;
 import kz.crtr.dto.LocalValue;
 import kz.crtr.dto.UserTokenState;
@@ -23,6 +25,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 @RequiredArgsConstructor
 @Service
@@ -35,15 +38,22 @@ public class SignServiceImpl implements SignService {
 
     @Override
     public UserTokenState sign(final LocalValue language, final LoginRequestDto loginRequest) {
-        Authentication authentication;
+        Authentication authentication = null;
+        if (StringUtils.isNotEmpty(loginRequest.getCertificate())) {
+            final Users users = getUserByEds(loginRequest.getCertificate(), language);
 
-        validate(loginRequest, language);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(users.getUsername());
 
-        final UserDetails userDetails = loadUserByUsername(language, loginRequest.getUsername());
+            if (nonNull(userDetails)) {
+                authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            }
+        } else {
+            final UserDetails userDetails = loadUserByUsername(language, loginRequest.getUsername());
 
-        authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword(), userDetails.getAuthorities())
-        );
+            authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword(), userDetails.getAuthorities())
+            );
+        }
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -76,22 +86,19 @@ public class SignServiceImpl implements SignService {
             throw BadRequestException.getEcpErrorValid(language);
         }
 
-        return usersRepository.findByUserDetail_Iin(edsInfo.getIin());
+        return usersRepository.findByUserDetail_IinAndBlockNot(edsInfo.getIin(), 1);
     }
 
-    private void validate(final LoginRequestDto loginRequest, final LocalValue language) {
-        if (StringUtils.isEmpty(loginRequest.getCertificate())) {
-            throw BadRequestException.chooseEsp(language);
+    @Override
+    public UserTokenState refreshToken(final RefreshTokenRequestDto dto, final LocalValue language) {
+        if (StringUtils.isEmpty(dto.getRefreshToken())) {
+            throw BadRequestException.emptyRefreshToken(language);
         }
+        return tokenUtil.generateToken(tokenUtil.getUserIdFromJWT(dto.getRefreshToken()), tokenUtil.getUserName(dto.getRefreshToken()));
+    }
 
-        if (StringUtils.isEmpty(loginRequest.getUsername()) && StringUtils.isEmpty(loginRequest.getPassword())) {
-            throw BadRequestException.emptyLoginOrPassword(language);
-        }
-
-        final Users users = getUserByEds(loginRequest.getCertificate(), language);
-
-        if (!users.getUsername().equalsIgnoreCase(loginRequest.getUsername())) {
-            throw BadRequestException.userNotEqualsEcpUser(language);
-        }
+    @Override
+    public UserTokenState validateToken(final TokenRequestDto dto) {
+        return tokenUtil.getUserTokenState(dto.getToken());
     }
 }
