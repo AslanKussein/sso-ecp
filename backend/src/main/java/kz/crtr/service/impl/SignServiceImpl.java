@@ -24,6 +24,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
@@ -41,7 +43,9 @@ public class SignServiceImpl implements SignService {
         Authentication authentication = null;
         if (StringUtils.isNotEmpty(loginRequest.getCertificate())) {
             final Users users = getUserByEds(loginRequest.getCertificate(), language);
-
+            if (isNull(users)) {
+                throw BadRequestException.notCorrectUserException(language);
+            }
             UserDetails userDetails = userDetailsService.loadUserByUsername(users.getUsername());
 
             if (nonNull(userDetails)) {
@@ -86,7 +90,11 @@ public class SignServiceImpl implements SignService {
             throw BadRequestException.getEcpErrorValid(language);
         }
 
-        return usersRepository.findByUserDetail_IinAndBlockNot(edsInfo.getIin(), 1);
+        List<Users> list = usersRepository.findByUserDetail_IinAndBlockNot(edsInfo.getIin(), 1);
+        if (list.size() > 1) {
+            throw BadRequestException.notCorrectUserException(language);
+        }
+        return usersRepository.findByUserDetail_IinAndBlockNot(edsInfo.getIin(), 1).get(0);
     }
 
     @Override
