@@ -31,6 +31,15 @@ export class SystemService {
       );
   }
 
+  public edit(id: number, data: any): Observable<any> {
+    return this.http.put(`${this.configService.apiUrl}/systems/`.concat(id.toLocaleString()), data)
+      .pipe(
+        tap(data => {
+        }),
+        catchError(SystemService.handleError)
+      );
+  }
+
   private static handleError(error: HttpErrorResponse) {
     if (error instanceof ErrorEvent) {
       console.error('An error occurred:', error);

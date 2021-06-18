@@ -22,6 +22,7 @@ import {JwtInterceptor} from "./directives/jwt.interceptor";
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {ModalModule} from "ngx-bootstrap/modal";
+import { DictionaryComponent } from './components/dictionary/dictionary.component';
 
 const ngxUiLoaderConfig: NgxUiLoaderConfig = {
   bgsColor: 'indigo',
@@ -45,6 +46,7 @@ export function HttpLoaderFactory(httpClient: any) {
     DataComponent,
     AddSystemComponent,
     LoginComponent,
+    DictionaryComponent,
   ],
   imports: [
     BrowserModule,

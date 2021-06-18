@@ -44,7 +44,18 @@ export class AuthenticationService implements OnDestroy {
     this.currentUser = this.currentUserSubject.asObservable();
   }
 
+  counter: number = 1;
+
   login(loginForm: any) {
+    if (this.counter == 5) {
+      this.util.setItem('unSuccess', loginForm?.value.username)
+      this.notifyService.showError('Неверные учетные данные пользователя. Просим обратиться к администратору системы', '');
+      return;
+    }
+    if (this.util.getItem('unSuccess') == loginForm?.value.username) {
+      this.notifyService.showError('Неверные учетные данные пользователя. Просим обратиться к администратору системы', '');
+      return;
+    }
     this.options.headers.set('lang', <string>this.util.getItem('lang'));
     this.subscriptions.add(this.loginIDP(loginForm?.value)
       .pipe(first())
@@ -62,9 +73,7 @@ export class AuthenticationService implements OnDestroy {
           }));
         },
         res => {
-          if (res == 'Bad credentials') {
-            res = 'asd'
-          }
+          this.counter++;
           this.notifyService.showError('', res)
         }));
   }

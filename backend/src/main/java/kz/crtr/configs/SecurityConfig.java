@@ -14,8 +14,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
+
+import java.util.Collections;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Configuration
@@ -24,7 +26,6 @@ import org.springframework.web.cors.CorsConfiguration;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtTokenFilter jwtAuthenticationFilter;
-    private final JwtTokenUtil tokenUtil;
     private final AuthEntryPointJwt unauthorizedHandler;
 
     @Bean
@@ -38,11 +39,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
+    @Bean
+    public CorsConfiguration corsConfiguration() {
+        final CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("*"));
+        configuration.setAllowedMethods(List.of("*"));
+        configuration.setExposedHeaders(Collections.singletonList("*"));
+        configuration.setAllowedHeaders(List.of("*"));
+        return configuration;
+    }
+
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable().httpBasic().disable();
 
-        http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
+        http.cors().configurationSource(request -> corsConfiguration().applyPermitDefaultValues())
                 .and()
                 .csrf()
                 .disable()
@@ -58,9 +68,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/**").authenticated()
                 .antMatchers("/open-api/**").permitAll()
                 .antMatchers(getPermitAllUrls()).permitAll()
-                .and().formLogin().loginPage("/login").usernameParameter("username").passwordParameter("password")
-                .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/")
-                .logoutSuccessHandler((httpServletRequest, httpServletResponse, authentication) -> tokenUtil.removeToken(httpServletRequest))
                 .and()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler);
     }

@@ -1,0 +1,74 @@
+<div class="card ">
+  <div class="row ">
+    <div class="col-sm-3">
+      <ul class="list-group">
+        <li class="list-group-item" [ngClass]="selectedDic == 'total' ? 'active' : ''"
+            (click)="setSelectedDic('total')" translate>dic.total
+        </li>
+        <li class="list-group-item" [ngClass]="selectedDic == 'systems' ? 'active' : ''"
+            (click)="setSelectedDic('systems')" translate>data.availableSystems
+        </li>
+        <li class="list-group-item" [ngClass]="selectedDic == 'authType' ? 'active' : ''"
+            (click)="setSelectedDic('authType')" translate>dic.authType
+        </li>
+      </ul>
+    </div>
+    <div class="col-sm">
+      <table class="table overflow-auto table-striped">
+        <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Название</th>
+          <th scope="col">URL</th>
+          <th scope="col">URL(ETS)</th>
+          <th scope="col">Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tbody style="cursor: pointer">
+        <tr *ngFor="let node of actData;let i = index">
+          <td>{{node.id}}</td>
+          <td>{{node.name}}</td>
+          <td>{{node.url}}</td>
+          <td>{{node.urlEtc}}</td>
+          <td class="edit-action" (click)="editData(node);openModal(template)">
+            <i aria-hidden="true" class="fa fa-pen"> </i>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Редактировать</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-sm">
+        <label class="col-sm col-form-label">Название<span class="text-danger">&nbsp;*</span></label>
+        <input type="text" class="col-sm form-control" [(ngModel)]="edData.name"/>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm">
+        <label class="col-sm col-form-label">URL</label>
+        <textarea class="col-sm form-control" [(ngModel)]="edData.url"></textarea>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm">
+        <label class="col-sm col-form-label">URL (ETS)</label>
+        <textarea class="col-sm form-control" [(ngModel)]="edData.urlEtc"></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+<!--    <button class="btn btn-primary float-end" (click)="remove()">Удалить</button>-->
+    <button class="btn btn-primary float-end" (click)="saveSystems()">Сохранить</button>
+  </div>
+</ng-template>

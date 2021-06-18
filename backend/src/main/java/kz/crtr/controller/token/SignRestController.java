@@ -9,6 +9,7 @@ import kz.crtr.dto.UserTokenState;
 import kz.crtr.service.SignService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,13 +39,21 @@ public class SignRestController {
     @PostMapping("/refreshToken")
     public ResponseEntity<UserTokenState> refreshToken(@RequestHeader final LocalValue lang,
                                                        @RequestBody final RefreshTokenRequestDto dto) {
-        return ResponseEntity.ok(signService.refreshToken(dto, lang));
+        try {
+            return ResponseEntity.ok(signService.refreshToken(dto, lang));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
     }
 
 
     @ApiOperation(value = "", notes = "check validate jwt token", response = UserTokenState.class)
     @PostMapping("/validateToken")
     public ResponseEntity<UserTokenState> validateToken(@RequestBody final TokenRequestDto dto) {
-        return ResponseEntity.ok(signService.validateToken(dto));
+        try {
+            return ResponseEntity.ok(signService.validateToken(dto));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
     }
 }

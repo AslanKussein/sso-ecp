@@ -19,6 +19,7 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint {
                          AuthenticationException authException) throws IOException {
         String res = authException.getMessage();
         if (authException.getMessage().equalsIgnoreCase("Bad credentials")) {
+
             res = "Не правильный логин или пароль";
         }
         log.log(Level.WARNING, "Unauthorized error: {}", res);

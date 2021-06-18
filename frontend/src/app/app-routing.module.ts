@@ -4,10 +4,12 @@ import {DataComponent} from "./components/data/data.component";
 import {AddSystemComponent} from "./components/add-system/add-system.component";
 import {LoginComponent} from "./components/login/login.component";
 import {AuthGuard} from "./directives/auth.guard";
+import {HeaderComponent} from "./components/header/header.component";
 
 const routes: Routes = [
   {path: '', redirectTo: '/login', pathMatch: 'full'},
   {path: 'home', component: DataComponent, canActivate: [AuthGuard]},
+  {path: 'header', component: HeaderComponent, canActivate: [AuthGuard]},
   {path: 'systems', component: AddSystemComponent, canActivate: [AuthGuard]},
   {path: 'login', component: LoginComponent},
 ];
