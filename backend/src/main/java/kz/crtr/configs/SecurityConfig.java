@@ -1,7 +1,6 @@
 package kz.crtr.configs;
 
 import kz.crtr.security.AuthEntryPointJwt;
-import kz.crtr.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,15 +27,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtTokenFilter jwtAuthenticationFilter;
     private final AuthEntryPointJwt unauthorizedHandler;
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
     @Override
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
