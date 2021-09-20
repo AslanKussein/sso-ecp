@@ -1,0 +1,32 @@
+<div class="card ">
+  <div class="row ">
+    <div class="col-sm-3">
+      <ul class="list-group">
+        <li class="list-group-item" [ngClass]="selectedDic == 'lock' ? 'active' : ''"
+            (click)="setSelectedDic('systems')" translate>Заблокированные пользователи
+        </li>
+      </ul>
+    </div>
+    <div class="col-sm">
+      <table class="table overflow-auto table-striped">
+        <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Разблокировать</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tbody style="cursor: pointer">
+        <tr *ngFor="let node of actData;let i = index">
+          <td>{{node.empId}}</td>
+<!--          <td>{{node.blockDate | date: 'yyyy/MM/dd HH:mm:ss'}}</td>-->
+          <td class="edit-action" (click)="unlock(node);">
+            <i aria-hidden="true" class="fa fa-unlock"> </i>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+

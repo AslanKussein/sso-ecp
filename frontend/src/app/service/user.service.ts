@@ -20,6 +20,20 @@ export class UserService {
     );
   }
 
+  getListBlockUser(): Observable<any> {
+    return this.http.post<any>(`${this.configService.apiUrl}/users/getListBlockUser`, {}).pipe(
+      tap(),
+      catchError(UserService.handleError)
+    );
+  }
+
+  unlockUser(id: number): Observable<any> {
+    return this.http.post<any>(`${this.configService.apiUrl}/users/unlockUser/`.concat(String(id)), {}).pipe(
+      tap(),
+      catchError(UserService.handleError)
+    );
+  }
+
   private static handleError(error: HttpErrorResponse) {
     return throwError(
       error);

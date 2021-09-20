@@ -23,6 +23,7 @@ import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {ModalModule} from "ngx-bootstrap/modal";
 import { DictionaryComponent } from './components/dictionary/dictionary.component';
+import { SettingsComponent } from './components/settings/settings.component';
 
 const ngxUiLoaderConfig: NgxUiLoaderConfig = {
   bgsColor: 'indigo',
@@ -47,6 +48,7 @@ export function HttpLoaderFactory(httpClient: any) {
     AddSystemComponent,
     LoginComponent,
     DictionaryComponent,
+    SettingsComponent,
   ],
   imports: [
     BrowserModule,

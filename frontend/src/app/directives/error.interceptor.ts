@@ -29,7 +29,11 @@ export class ErrorInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(catchError(err => {
       this.ngxLoader.stop();
       if (err.status === 401 && !window.location.href.includes('login')) {
-        return this.handle401Error(request, next);
+        if (err.url.includes('refreshToken')) {
+          this.authenticationService.logout();
+        } else {
+          return this.handle401Error(request, next);
+        }
       } else if (err.status === 400) {
         if (err.url.includes(this.configService.authUrl)) {
           if (err.error.error_description.includes('Refresh token expired')) {

@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>kz.crtr</groupId>
+        <groupId>kz.mtszn</groupId>
         <artifactId>oauth</artifactId>
         <version>0.0.1</version>
     </parent>
@@ -30,7 +30,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>kz.crtr</groupId>
+            <groupId>kz.mtszn</groupId>
             <artifactId>frontend</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
