@@ -4,7 +4,7 @@ html, body, app-root {
 }
 
 .cursor-pointer {
-  cursor: pointer!important;
+  cursor: pointer !important;
 }
 
 .choose-ecp {
@@ -20,12 +20,15 @@ html, body, app-root {
   background-size: 1920px 1080px;
   background-position: center;
 }
+
 @function black($opacity) {
   @return rgba(black, $opacity)
 }
+
 @function white($opacity) {
   @return rgba(white, $opacity)
 }
+
 .main-block-dark {
   position: fixed;
   min-width: 100%;
@@ -68,8 +71,12 @@ html, body, app-root {
   color: #00b2a8;
 }
 
+.red-color {
+  color: red;
+}
+
 .vitrina {
-  font-size: 1.2rem;
+  font-size: 1rem;
   color: #0d0d0d;
 }
 
@@ -79,15 +86,23 @@ html, body, app-root {
 }
 
 .input-group-text {
-  background-color: transparent ;
+  background-color: transparent;
   border-left: none;
 }
 
-.input-group>.custom-select:not(:last-child), .input-group>.form-control:not(:last-child) {
+.input-group > .custom-select:not(:last-child), .input-group > .form-control:not(:last-child) {
   border-right: white;
+}
+
+.acceptCondition {
+  font-size: 12px;
 }
 
 .errText {
   font-size: 10px;
   margin-top: -5px;
+}
+
+.mb-3 {
+  margin-bottom: 0 !important;
 }

@@ -15,12 +15,21 @@ spring.jpa:
   database: oracle
   show-sql: false
   open-in-view: false
+  properties:
+    hibernate:
+      enable_lazy_load_no_trans: true
 spring.datasource:
   platform: oracle
   driverClassName: oracle.jdbc.OracleDriver
   url: jdbc:oracle:thin:@//172.16.17.65:1521/PV10
   username: solidary
   password: A123456a
+spring:
+  cache:
+    type: redis
+  redis:
+    host: 172.16.17.86
+    port: 6379
 auth:
   jwt:
     secret: 138BQYF9Z3eukz9N8wXmAy.g6KpriWigGyO7LLYhV8N@2MU9g1cEy52ZVsQiMWPr

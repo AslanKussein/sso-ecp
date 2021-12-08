@@ -1,27 +1,28 @@
 <div class="card ">
   <div class="row ">
-    <div class="col-sm-3">
+    <div class="col-sm-4">
       <ul class="list-group">
-        <li class="list-group-item" [ngClass]="selectedDic == 'total' ? 'active' : ''"
-            (click)="setSelectedDic('total')" translate>dic.total
-        </li>
+        <!--        <li class="list-group-item" [ngClass]="selectedDic == 'total' ? 'active' : ''"-->
+        <!--            (click)="setSelectedDic('total')" translate>dic.total-->
+        <!--        </li>-->
         <li class="list-group-item" [ngClass]="selectedDic == 'systems' ? 'active' : ''"
             (click)="setSelectedDic('systems')" translate>data.availableSystems
         </li>
         <li class="list-group-item" [ngClass]="selectedDic == 'authType' ? 'active' : ''"
-            (click)="setSelectedDic('authType')" translate>dic.authType
+            (click)="setSelectedDic('authType')" translate>dic.blockUser <span
+          class="badge bg-danger ms-2">{{blockUserList.length}}</span>
         </li>
       </ul>
     </div>
-    <div class="col-sm">
+    <div class="col-sm" *ngIf="selectedDic == 'systems'">
+      <!--      <button class="btn btn-primary" type="button" (click)="openModal(template)">Добавить систему</button>-->
       <table class="table overflow-auto table-striped">
         <thead>
         <tr>
           <th scope="col">ID</th>
-          <th scope="col">Название</th>
-          <th scope="col">URL</th>
-          <th scope="col">URL(ETS)</th>
-          <th scope="col">Действия</th>
+          <th scope="col" translate>dic.name</th>
+          <th scope="col" translate>URL</th>
+          <th scope="col" translate>dic.action</th>
         </tr>
         </thead>
         <tbody>
@@ -30,9 +31,33 @@
           <td>{{node.id}}</td>
           <td>{{node.name}}</td>
           <td>{{node.url}}</td>
-          <td>{{node.urlEtc}}</td>
           <td class="edit-action" (click)="editData(node);openModal(template)">
             <i aria-hidden="true" class="fa fa-pen"> </i>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-sm" *ngIf="selectedDic == 'authType'">
+      <!--      <button class="btn btn-primary" type="button" (click)="openModal(template)">Добавить систему</button>-->
+      <table class="table overflow-auto table-striped">
+        <thead>
+        <tr>
+          <th scope="col" translate>empId</th>
+          <th scope="col" translate>dic.fullName</th>
+          <th scope="col" translate>dic.blockDate</th>
+          <th scope="col" translate>IP</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tbody style="cursor: pointer">
+        <tr *ngFor="let node of blockUserList;let i = index">
+          <td>{{node.empId}}</td>
+          <td>{{node.fullName}}</td>
+          <td>{{node.blockDate}}</td>
+          <td>{{node.ip}}</td>
+          <td class="edit-action text-reset" (click)="unBlockUser(node.empId);">
+            <i aria-hidden="true" class="fa fa-user-lock"> </i>
           </td>
         </tr>
         </tbody>
@@ -42,7 +67,7 @@
 </div>
 <ng-template #template>
   <div class="modal-header">
-    <h4 class="modal-title pull-left">Редактировать</h4>
+    <h4 class="modal-title pull-left" translate>dic.edit</h4>
     <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -50,7 +75,7 @@
   <div class="modal-body">
     <div class="row">
       <div class="col-sm">
-        <label class="col-sm col-form-label">Название<span class="text-danger">&nbsp;*</span></label>
+        <label class="col-sm col-form-label" translate>dic.name<span class="text-danger">&nbsp;*</span></label>
         <input type="text" class="col-sm form-control" [(ngModel)]="edData.name"/>
       </div>
     </div>
@@ -66,9 +91,19 @@
         <textarea class="col-sm form-control" [(ngModel)]="edData.urlEtc"></textarea>
       </div>
     </div>
+    <div class="row">
+      <div class="col-sm">
+        <label class="col-sm col-form-label" translate>dic.systemCode</label>
+        <ng-select [items]="dAlias"
+                   bindLabel="nameRu"
+                   bindValue="code"
+                   [(ngModel)]="edData.aliasCode">
+        </ng-select>
+      </div>
+    </div>
   </div>
   <div class="modal-footer">
-<!--    <button class="btn btn-primary float-end" (click)="remove()">Удалить</button>-->
-    <button class="btn btn-primary float-end" (click)="saveSystems()">Сохранить</button>
+    <!--    <button class="btn btn-primary float-end" (click)="remove()">Удалить</button>-->
+    <button class="btn btn-primary float-end" (click)="saveSystems()" translate>dic.save</button>
   </div>
 </ng-template>

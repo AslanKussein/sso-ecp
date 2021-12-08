@@ -24,6 +24,16 @@ public class UserDto {
     private DBranch branch;
     @ApiModelProperty(value = "ФИО пользователя")
     private String fullName;
+    @ApiModelProperty(value = "Дата рождения")
+    private String birthDate;
+    @ApiModelProperty(value = "Номер телефона")
+    private String phone;
+    @ApiModelProperty(value = "Почта")
+    private String email;
     @ApiModelProperty(value = "доступные системы пользователя")
     private Set<String> availableSystems;
+    @ApiModelProperty(value = "Данные из персон")
+    private PersonDto personDto;
+    @ApiModelProperty(value = "роль админа")
+    private Boolean isAdmin;
 }

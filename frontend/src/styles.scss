@@ -5,6 +5,7 @@
 @import '~@fortawesome/fontawesome-free/scss/regular.scss';
 @import '~@fortawesome/fontawesome-free/scss/brands.scss';
 @import '~ngx-toastr/toastr';
+@import "~@ng-select/ng-select/themes/default.theme.css";
 
 @import '~mdb-angular-ui-kit/assets/scss/mdb.scss';
 
@@ -17,3 +18,9 @@ body {
   overflow-x: hidden;
   font-family: 'Roboto', sans-serif!important;
 }
+@import '~@fortawesome/fontawesome-free/scss/fontawesome.scss';
+@import '~@fortawesome/fontawesome-free/scss/solid.scss';
+@import '~@fortawesome/fontawesome-free/scss/regular.scss';
+@import '~@fortawesome/fontawesome-free/scss/brands.scss';
+
+@import '~mdb-angular-ui-kit/assets/scss/mdb.scss';

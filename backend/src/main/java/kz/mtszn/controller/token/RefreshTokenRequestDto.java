@@ -1,14 +1,9 @@
 package kz.mtszn.controller.token;
 
+import lombok.Data;
 
+@Data
 public class RefreshTokenRequestDto {
+    private String accessToken;
     private String refreshToken;
-
-    public String getRefreshToken() {
-        return refreshToken;
-    }
-
-    public void setRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
-    }
 }

@@ -9,7 +9,7 @@ import kz.mtszn.dto.UserTokenState;
 public interface SignService {
     UserTokenState sign(final LocalValue language, final LoginRequestDto loginRequest);
 
-    UserTokenState refreshToken(final RefreshTokenRequestDto dto, final LocalValue language);
+    UserTokenState refreshToken(final RefreshTokenRequestDto dto, final LocalValue language) throws Exception;
 
     UserTokenState validateToken(final TokenRequestDto dto);
 }

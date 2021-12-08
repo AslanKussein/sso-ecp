@@ -5,7 +5,6 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {HeaderComponent} from './components/header/header.component';
 import {FooterComponent} from './components/footer/footer.component';
-import {MdbModule} from 'mdb-angular-ui-kit';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {DataComponent} from './components/data/data.component';
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
@@ -22,8 +21,27 @@ import {JwtInterceptor} from "./directives/jwt.interceptor";
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {ModalModule} from "ngx-bootstrap/modal";
-import { DictionaryComponent } from './components/dictionary/dictionary.component';
-import { SettingsComponent } from './components/settings/settings.component';
+import {DictionaryComponent} from './components/dictionary/dictionary.component';
+import {SettingsComponent} from './components/settings/settings.component';
+import {ProfileComponent} from './components/profile/profile.component';
+import {MdbAccordionModule} from 'mdb-angular-ui-kit/accordion';
+import {MdbCarouselModule} from 'mdb-angular-ui-kit/carousel';
+import {MdbCheckboxModule} from 'mdb-angular-ui-kit/checkbox';
+import {MdbCollapseModule} from 'mdb-angular-ui-kit/collapse';
+import {MdbDropdownModule} from 'mdb-angular-ui-kit/dropdown';
+import {MdbFormsModule} from 'mdb-angular-ui-kit/forms';
+import {MdbModalModule} from 'mdb-angular-ui-kit/modal';
+import {MdbPopoverModule} from 'mdb-angular-ui-kit/popover';
+import {MdbRadioModule} from 'mdb-angular-ui-kit/radio';
+import {MdbRangeModule} from 'mdb-angular-ui-kit/range';
+import {MdbRippleModule} from 'mdb-angular-ui-kit/ripple';
+import {MdbScrollspyModule} from 'mdb-angular-ui-kit/scrollspy';
+import {MdbTabsModule} from 'mdb-angular-ui-kit/tabs';
+import {MdbTooltipModule} from 'mdb-angular-ui-kit/tooltip';
+import {MdbValidationModule} from 'mdb-angular-ui-kit/validation';
+import {PaginationModule} from "ngx-bootstrap/pagination";
+import {NgxMaskModule} from "ngx-mask";
+import {NgSelectModule} from "@ng-select/ng-select";
 
 const ngxUiLoaderConfig: NgxUiLoaderConfig = {
   bgsColor: 'indigo',
@@ -49,26 +67,45 @@ export function HttpLoaderFactory(httpClient: any) {
     LoginComponent,
     DictionaryComponent,
     SettingsComponent,
+    ProfileComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    MdbModule,
-    FormsModule,
-    BrowserAnimationsModule,
-    HttpClientModule,
-    ModalModule.forRoot(),
-    NgxUiLoaderModule.forRoot(ngxUiLoaderConfig),
-    ToastrModule.forRoot(),
-    ReactiveFormsModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
-        deps: [HttpClient]
-      }
-    })
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        FormsModule,
+        BrowserAnimationsModule,
+        HttpClientModule,
+        ModalModule.forRoot(),
+        NgxUiLoaderModule.forRoot(ngxUiLoaderConfig),
+        ToastrModule.forRoot(),
+        ReactiveFormsModule,
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClient]
+            }
+        }),
+
+        MdbAccordionModule,
+        MdbCarouselModule,
+        MdbCheckboxModule,
+        MdbCollapseModule,
+        MdbDropdownModule,
+        MdbFormsModule,
+        MdbModalModule,
+        MdbPopoverModule,
+        MdbRadioModule,
+        MdbRangeModule,
+        MdbRippleModule,
+        MdbScrollspyModule,
+        MdbTabsModule,
+        MdbTooltipModule,
+        MdbValidationModule,
+        PaginationModule.forRoot(),
+        NgxMaskModule.forRoot(),
+        NgSelectModule,
+    ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},

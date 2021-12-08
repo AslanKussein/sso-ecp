@@ -16,4 +16,7 @@ public class NotFoundException extends DetailedException {
         return new NotFoundException(BundleMessageUtil.getLocaledValue(language, "error.user.not.found", username));
     }
 
+    public static NotFoundException userNotFoundByPassword(final LocalValue language) {
+        return new NotFoundException(BundleMessageUtil.getLocaledValue(language, "user.not.found.by.pass"));
+    }
 }

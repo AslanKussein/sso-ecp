@@ -6,6 +6,11 @@ import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.Authorization;
 import kz.mtszn.dto.ErrorDto;
 import kz.mtszn.dto.PublicKeyDto;
+import kz.mtszn.dto.UserLogsDTO;
+import kz.mtszn.models.redisrepository.AuthorizeUserRepository;
+import kz.mtszn.models.redisrepository.BlackListUserRepository;
+import kz.mtszn.security.IAuthenticationFacade;
+import kz.mtszn.service.UserActionLogs;
 import kz.mtszn.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,13 +33,30 @@ import static java.util.Objects.nonNull;
 public class TokenRestController {
 
     private final JwtTokenUtil tokenUtil;
+    private final IAuthenticationFacade facade;
+    private final UserActionLogs userActionLogs;
+    private final BlackListUserRepository blackListUserRepository;
+    private final AuthorizeUserRepository authorizeUserRepository;
 
     @ApiOperation(value = "", notes = "remove jwt token", response = void.class, authorizations = {
             @Authorization(value = "bearer-key")}, tags = {}
     )
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(HttpServletRequest request) {
-        tokenUtil.removeToken(tokenUtil.getJwtFromRequest(request));
+        userActionLogs.createUserActionLogs(
+                UserLogsDTO.builder()
+                        .empId(facade.getUser().getEmpId())
+                        .username(facade.getUser().getUsername())
+                        .eventMessage("Выход из системы")
+                        .build()
+        );
+
+        String token = tokenUtil.getJwtFromRequest(request);
+
+        blackListUserRepository.findByAccessToken(token).ifPresent(blackListUserRepository::delete);
+        authorizeUserRepository.findByAccessToken(token).ifPresent(authorizeUserRepository::delete);
+
+        tokenUtil.removeToken(token);
         SecurityContextHolder.getContext().setAuthentication(null);
         HttpSession session = request.getSession(false);
         if (nonNull(session)) {

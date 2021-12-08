@@ -3,6 +3,7 @@
     "@angular/animations": "^12.0.0",
     "@angular/common": "^12.0.0",
     "@angular/platform-browser": "^12.0.0",
+    "@ng-select/ng-select": "^8.1.1",
     "@ngx-translate/core": "^13.0.0",
     "@ngx-translate/http-loader": "^6.0.0",
     "angular-notifier": "^9.0.1",
@@ -10,6 +11,8 @@
     "mdb-ui-kit": "^3.5.1",
     "ngx-bootstrap": "^6.2.0",
     "ngx-bootstrap-modal": "^2.0.1",
+    "ngx-mask": "^12.0.0",
+    "ngx-pagination": "^5.1.1",
     "ngx-toastr": "^13.2.1",
     "ngx-ui-loader": "^11.0.0"
   },

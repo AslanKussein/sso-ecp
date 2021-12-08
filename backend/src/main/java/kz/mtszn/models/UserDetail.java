@@ -29,6 +29,8 @@ public class UserDetail implements Serializable {
     private String lastname;
     private String firstname;
     private String middlename;
+    private String phone;
+    private String email;
     @JoinColumn(name = "branch_id", referencedColumnName = "id")
     @OneToOne(optional = false)
     private DBranch branch;

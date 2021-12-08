@@ -1,10 +1,9 @@
-import {Component, OnDestroy, OnInit, TemplateRef} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef} from '@angular/core';
 import {Subscription} from "rxjs";
-import {BsModalRef, BsModalService} from "ngx-bootstrap/modal";
 import {NotificationService} from "../../service/notification.service";
 import {NgxUiLoaderService} from "ngx-ui-loader";
 import {UserService} from "../../service/user.service";
-import { formatDate } from '@angular/common';
+import {PageDto} from "../../models/pageDto";
 
 @Component({
   selector: 'app-settings',
@@ -16,46 +15,46 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   selectedDic: string = 'lock';
   actData: any;
+  totalItems = 0;
+  itemsPerPage = 10;
+  currentPage = 0;
+  page: any = PageDto;
 
   constructor(private userService: UserService,
               private notifyService: NotificationService,
               private ngxLoader: NgxUiLoaderService) {
   }
 
-  ngOnInit(): void {
-    this.getListBlockUser();
-  }
+  pageChanged(event: any): void {
+    console.log('pageNo ', event)
 
-  getListBlockUser() {
-    this.ngxLoader.startBackground();
-    this.subscriptions.add(this.userService.getListBlockUser()
-      .subscribe(res => {
-        this.actData = res;
-      }));
-    this.ngxLoader.stopBackground()
-  }
+    if (this.currentPage !== event.page) {
+      this.loadAction(event.page);
 
-  setSelectedDic(code: string) {
-    this.selectedDic = code;
-    if (code == 'lock') {
-      this.getListBlockUser();
     }
   }
 
+  ngOnInit(): void {
+    this.loadAction(1);
+  }
 
-  unlock(obj: any) {
-    this.ngxLoader.startBackground();
-
+  loadAction(pageNo: number) {
+    this.page = new PageDto();
+    this.page.pageNumber = pageNo;
+    this.page.pageSize = this.itemsPerPage;
+    this.ngxLoader.startBackground()
     this.subscriptions.add(
-      this.userService.unlockUser(obj.empId).subscribe(
-        res => {
-          this.notifyService.showInfo('Разблокирован', '');
-          this.getListBlockUser();
-        }
-      )
-    )
-    this.ngxLoader.stopBackground()
+      this.userService.getAllAction(this.page).subscribe(res => {
+        this.ngxLoader.stopBackground()
+        this.actData = res.content;
+        this.totalItems = res.totalElements;
+        this.currentPage = pageNo;
 
+      }, () => {
+        this.ngxLoader.stopBackground();
+        return;
+      })
+    )
   }
 
   ngOnDestroy() {

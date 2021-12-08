@@ -16,4 +16,6 @@ public interface UsersRepository extends JpaRepository<Users, Long> {
 
     @Query(value = "select u from Users u where upper(u.userDetail.iin) = upper(:iin) and (u.block <> 1 or u.block is null )")
     Users findByUserDetail_IinAndBlockNot(final String iin);
+
+    Users findByEmpIdAndPassword(final Long empId, final String password);
 }

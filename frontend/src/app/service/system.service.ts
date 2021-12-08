@@ -32,7 +32,43 @@ export class SystemService {
   }
 
   public edit(id: number, data: any): Observable<any> {
-    return this.http.put(`${this.configService.apiUrl}/systems/`.concat(id.toLocaleString()), data)
+    return this.http.put(`${this.configService.apiUrl}/systems/${id}`, data)
+      .pipe(
+        tap(data => {
+        }),
+        catchError(SystemService.handleError)
+      );
+  }
+
+  public redirectSystem(data: any): Observable<any> {
+    return this.http.post(`${this.configService.apiUrl}/systems/redirectSystem`, data)
+      .pipe(
+        tap(data => {
+        }),
+        catchError(SystemService.handleError)
+      );
+  }
+
+  public getDAlias(): Observable<any> {
+    return this.http.get(`${this.configService.apiUrl}/systems/getDAlias`)
+      .pipe(
+        tap(data => {
+        }),
+        catchError(SystemService.handleError)
+      );
+  }
+
+  public getBlockUserList(): Observable<any> {
+    return this.http.get(`${this.configService.apiUrl}/systems/getBlockUserList`)
+      .pipe(
+        tap(data => {
+        }),
+        catchError(SystemService.handleError)
+      );
+  }
+
+  public unBlockUser(empId: number): Observable<any> {
+    return this.http.delete(`${this.configService.apiUrl}/systems/unBlockUser/${empId}`)
       .pipe(
         tap(data => {
         }),

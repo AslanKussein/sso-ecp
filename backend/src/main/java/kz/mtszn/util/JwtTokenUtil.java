@@ -3,6 +3,10 @@ package kz.mtszn.util;
 import io.jsonwebtoken.*;
 import kz.mtszn.dto.PublicKeyDto;
 import kz.mtszn.dto.UserTokenState;
+import kz.mtszn.models.redis.BlackListUser;
+import kz.mtszn.models.redisrepository.AuthorizeUserRepository;
+import kz.mtszn.models.redisrepository.BlackListUserRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -14,11 +18,13 @@ import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.Map;
+import java.util.Optional;
 import java.util.logging.Level;
 
 import static java.util.Objects.nonNull;
 import static kz.mtszn.util.Utils.isNullOrEmpty;
 
+@RequiredArgsConstructor
 @Component
 @Log
 public class JwtTokenUtil {
@@ -29,11 +35,27 @@ public class JwtTokenUtil {
     private long expirationSeconds;
     @Value("${auth.jwt.expirationRefreshDay}")
     private long expirationRefreshDay;
+    private final AuthorizeUserRepository authorizeUserRepository;
+    private final BlackListUserRepository blackListUserRepository;
+
+    public Long getSessId (String accessTokenString) {
+        try {
+            Claims cl = Jwts.parser()
+                    .setSigningKey(SECRET) //
+                    .parseClaimsJws(accessTokenString)
+                    .getBody();
+            return  ((Integer) cl.get("sessId")).longValue();
+        } catch (Exception e) {
+            //e.printStackTrace();
+            return null;
+        }
+    }
 
     public UserTokenState generateToken(String empId, String login) {
         final Date expiry = Date.from(ZonedDateTime.now().plusSeconds(expirationSeconds).toInstant());
 
         String compact = Jwts.builder()
+                .claim("empId", empId)
                 .setId(empId)
                 .setSubject(login)
                 .setExpiration(expiry)
@@ -69,8 +91,17 @@ public class JwtTokenUtil {
         return claims.getSubject();
     }
 
+    public String getEmpId(String token) {
+        Claims claims = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
+        return claims.getId();
+    }
+
     public boolean validateToken(String token) {
         try {
+            Optional<BlackListUser> blackListUser = blackListUserRepository.findByAccessToken(token);
+            if (blackListUser.isPresent()) {
+                return Boolean.FALSE;
+            }
             Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token);
             return true;
         } catch (ExpiredJwtException expEx) {

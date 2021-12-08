@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {Component, ElementRef, Input, OnDestroy, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {FormBuilder, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {NgxUiLoaderService} from "ngx-ui-loader";
@@ -7,6 +7,8 @@ import {NotificationService} from "../../service/notification.service";
 import {Util} from "../../service/util";
 import {BsModalRef, BsModalService} from "ngx-bootstrap/modal";
 import {TranslateService} from "@ngx-translate/core";
+import {OpenApiService} from "../../service/open-api.service";
+import {Subscription} from "rxjs";
 
 declare function callSignXml(p: () => void): any;
 
@@ -15,25 +17,28 @@ declare function callSignXml(p: () => void): any;
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   mySelect: any = [
     {code: "ru", value: 'Рус'},
     {code: "kz", value: 'Қаз'}
   ];
-  @Input() imgPath: string = "../../../assets/images/img_2-min.png";
+  @Input() imgPath: string = "assets/images/img.png";
+  @Input() imgPath1: string = "assets/images/img_1.png";
 
   modalRef!: BsModalRef;
   loginForm: any;
-  selectedTab: number = 1;
+  selectedTab: number = 2;
   submitted = false;
+  contactData: any;
+  subscriptions: Subscription = new Subscription();
 
   constructor(private formBuilder: FormBuilder,
               private router: Router,
-              private util: Util,
+              public util: Util,
               private translate: TranslateService,
-              private authenticationService: AuthenticationService,
+              public authenticationService: AuthenticationService,
               private notifyService: NotificationService,
-              private ngxLoader: NgxUiLoaderService,
+              private openApiService: OpenApiService,
               private modalService: BsModalService) {
     if (this.authenticationService.currentUserValue) {
       this.util.dnHref('/home')
@@ -70,12 +75,18 @@ export class LoginComponent implements OnInit {
       accept: ['', Validators.requiredTrue]
     });
     if (this.util.getItem('lang') == null) {
-      this.setValue('lang', 'ru');
-      this.util.setItem('lang', 'ru');
+      this.setValue('lang', 'kz');
+      this.util.setItem('lang', 'kz');
     } else {
       this.setValue('lang', this.util.getItem('lang'));
     }
     this.translate.use(<string>localStorage.getItem('lang'));
+
+    this.subscriptions.add(
+      this.openApiService.getContacts().subscribe(e => {
+        this.contactData = e;
+      })
+    )
   }
 
   setValue(controlName: string, value: any) {
@@ -93,7 +104,9 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    this.ngxLoader.startBackground()
+    if (!this.loginForm.valid) {
+      return;
+    }
     this.submitted = true;
     if (this.selectedTab == 1) {
       this.loginForm.value.certificate = null;
@@ -105,7 +118,6 @@ export class LoginComponent implements OnInit {
 
     this.authenticationService.login(this.loginForm);
 
-    this.ngxLoader.stopBackground()
   }
 
   checkCert(e: any) {
@@ -115,5 +127,9 @@ export class LoginComponent implements OnInit {
       me.loginForm.value.certificate = document.getElementById('certificate').value;
       me.login();
     });
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 }

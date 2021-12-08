@@ -7,28 +7,39 @@
         <li class="nav-item" role="presentation">
           <a class="nav-link" data-mdb-toggle="tab" [ngClass]="selectedTab == 1 ? 'active' : ''"
              role="tab" (click)="changeTab(1)" aria-controls="ex1-tabs-1" aria-selected="true" translate>
-            data.availableSystems
+            profile.title
           </a>
         </li>
         <li class="nav-item" role="presentation">
-          <a class="nav-link" [ngClass]="selectedTab == 2 ? 'active' : ''" data-mdb-toggle="tab"
-             role="tab" (click)="changeTab(2)" aria-controls="ex1-tabs-2" aria-selected="false" translate>
-            data.settings
+          <a class="nav-link" data-mdb-toggle="tab" [ngClass]="selectedTab == 2 ? 'active' : ''"
+             role="tab" (click)="changeTab(2)" aria-controls="ex1-tabs-2" aria-selected="true" translate>
+            data.availableSystems
           </a>
         </li>
         <li class="nav-item" role="presentation">
           <a class="nav-link" [ngClass]="selectedTab == 3 ? 'active' : ''" data-mdb-toggle="tab"
              role="tab" (click)="changeTab(3)" aria-controls="ex1-tabs-3" aria-selected="false" translate>
-            data.dictionary
+            activity.recent
+          </a>
+        </li>
+
+        <li class="nav-item" role="presentation" *ngIf="this.util.getCurrentUser().isAdmin">
+          <a class="nav-link" [ngClass]="selectedTab == 4 ? 'active' : ''" data-mdb-toggle="tab"
+             role="tab" (click)="changeTab(4)" aria-controls="ex1-tabs-4" aria-selected="false" translate>
+            data.admin
           </a>
         </li>
       </ul>
       <div class="tab-content">
-        <div class="tab-pane fade" [ngClass]="selectedTab == 1 ? 'active show' : ''" id="ex1-tabs-1"
-             role="tabpanel" aria-labelledby="ex1-tab-1">
+        <div class="tab-pane fade" id="ex1-tabs-1" [ngClass]="selectedTab == 1 ? 'active show' : ''" role="tabpanel"
+             aria-labelledby="ex1-tabs-1">
+          <app-profile></app-profile>
+        </div>
+        <div class="tab-pane fade" [ngClass]="selectedTab == 2 ? 'active show' : ''" id="ex1-tab-2"
+             role="tabpane2" aria-labelledby="ex1-tab-2">
           <div class="row system-list">
             <div class="col-sm" *ngFor="let obj of systems">
-              <div class="card text-center system-item" (click)="redirect(obj.url)">
+              <div class="card text-center system-item" (click)="redirect(obj)">
                 <div class="card-body">
                   <p class="card-text">{{obj.name}}</p>
                 </div>
@@ -36,12 +47,12 @@
             </div>
           </div>
         </div>
-        <div class="tab-pane fade" id="ex1-tabs-2" [ngClass]="selectedTab == 2 ? 'active show' : ''" role="tabpanel"
-             aria-labelledby="ex1-tab-2">
+        <div class="tab-pane fade" id="ex1-tabs-3" [ngClass]="selectedTab == 3 ? 'active show' : ''" role="tabpane3"
+             aria-labelledby="ex1-tabs-3">
           <app-settings></app-settings>
         </div>
-        <div class="tab-pane fade p-3" [ngClass]="selectedTab == 3 ? 'active show' : ''" id="ex1-tabs-3" role="tabpanel"
-             aria-labelledby="ex1-tab-3">
+        <div class="tab-pane fade p-3" [ngClass]="selectedTab == 4 ? 'active show' : ''" id="ex1-tabs-4" role="tabpane4" *ngIf="this.util.getCurrentUser().isAdmin"
+             aria-labelledby="ex1-tabs-4">
           <app-dictionary></app-dictionary>
         </div>
       </div>

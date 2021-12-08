@@ -9,6 +9,8 @@ import {NotificationService} from "./notification.service";
 import {TranslateService} from "@ngx-translate/core";
 import {UserService} from "./user.service";
 import {ActivatedRoute, Router} from "@angular/router";
+import {NgxUiLoaderService} from "ngx-ui-loader";
+import {OpenApiService} from "./open-api.service";
 
 @Injectable({providedIn: 'root'})
 export class AuthenticationService implements OnDestroy {
@@ -28,6 +30,8 @@ export class AuthenticationService implements OnDestroy {
               private configService: ConfigService,
               private util: Util,
               private userService: UserService,
+              private openApiService: OpenApiService,
+              private ngxLoader: NgxUiLoaderService,
               private activatedRoute: ActivatedRoute,
               private notifyService: NotificationService,
               public translate: TranslateService) {
@@ -44,38 +48,55 @@ export class AuthenticationService implements OnDestroy {
     this.currentUser = this.currentUserSubject.asObservable();
   }
 
-  counter: number = 1;
+  counter: number = 5;
+
+  getCounter(loginForm: any) {
+    this.subscriptions.add(this.openApiService.getCounter(loginForm?.value.username).subscribe(data => {
+      this.counter = 5 - data.failurecounter;
+
+      if (this.counter == 0) {
+        this.notifyService.showWarning("Ваша учетка заблокирована обратитесь к администратору", "");
+        return;
+      }
+
+      this.ngxLoader.startBackground();
+
+      this.options.headers.set('lang', <string>this.util.getItem('lang'));
+      this.subscriptions.add(this.loginIDP(loginForm?.value)
+        .pipe(first())
+        .subscribe(
+          param_ => {
+            this.subscriptions.add(this.userService.findUserByLogin().subscribe(data => {
+              this.ngxLoader.stopBackground();
+
+              if (data != null) {
+                this.counter = 5;
+                param_.fullName = data.fullName
+                param_.username = data.username
+                param_.empId = data.empId
+                param_.branch = data.branch
+                param_.personDto = data.personDto
+                param_.email = data.email
+                param_.phone = data.phone
+                param_.isAdmin = data.isAdmin
+                localStorage.setItem('currentUser', JSON.stringify(param_));
+                this.util.dnHref('/home')
+              }
+            }, () => {
+              this.ngxLoader.stopBackground();
+            }));
+          },
+          res => {
+            this.ngxLoader.stopBackground();
+            this.notifyService.showError('', res)
+          }));
+    }, () => {
+      this.ngxLoader.stopBackground();
+    }));
+  }
 
   login(loginForm: any) {
-    // if (this.counter == 5) {
-    //   this.util.setItem('unSuccess', loginForm?.value.username)
-    //   this.notifyService.showError('Неверные учетные данные пользователя. Просим обратиться к администратору системы', '');
-    //   return;
-    // }
-    // if (this.util.getItem('unSuccess') == loginForm?.value.username) {
-    //   this.notifyService.showError('Неверные учетные данные пользователя. Просим обратиться к администратору системы', '');
-    //   return;
-    // }
-    this.options.headers.set('lang', <string>this.util.getItem('lang'));
-    this.subscriptions.add(this.loginIDP(loginForm?.value)
-      .pipe(first())
-      .subscribe(
-        param_ => {
-          this.subscriptions.add(this.userService.findUserByLogin().subscribe(data => {
-            if (data != null) {
-              param_.fullName = data.fullName
-              param_.username = data.username
-              param_.empId = data.empId
-              param_.branch = data.branch
-              localStorage.setItem('currentUser', JSON.stringify(param_));
-              this.util.dnHref('/home')
-            }
-          }));
-        },
-        res => {
-          this.counter++;
-          this.notifyService.showError('', res)
-        }));
+    this.getCounter(loginForm);
   }
 
   loginIDP(loginForm: any) {
@@ -103,7 +124,10 @@ export class AuthenticationService implements OnDestroy {
     headers = headers.set('lang', this.util.getCurLang());
 
     this.options.headers.set('lang', this.util.getCurLang());
-    return this.http.post<any>(`${this.configService.authUrl}`.concat('/refreshToken'), {refreshToken: <string>this.getRefreshToken()}, {headers: headers})
+    return this.http.post<any>(`${this.configService.authUrl}`.concat('/refreshToken'), {
+      refreshToken: <string>this.getRefreshToken(),
+      accessToken: <string>this.getJwtToken()
+    }, {headers: headers})
       .pipe(tap((tokens: User) => {
           this.storeTokens(tokens);
         },
@@ -123,7 +147,7 @@ export class AuthenticationService implements OnDestroy {
       let systemLang = this.util.getItem('lang');
       this.util.dnHref('/login');
       localStorage.clear();
-      this.util.setItem('lang', systemLang == null ? 'ru' : systemLang);
+      this.util.setItem('lang', systemLang == null ? 'kz' : systemLang);
     }
   }
 

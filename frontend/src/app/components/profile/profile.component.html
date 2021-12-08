@@ -1,0 +1,181 @@
+<div class="row">
+  <div class="col-3">
+    <div
+      class="nav flex-column nav-tabs text-center"
+      id="v-tabs-tab"
+      role="tablist"
+      aria-orientation="vertical"
+    >
+      <a
+        class="nav-link "
+        [ngClass]="selectedTab == 1 ? 'active' : ''"
+        data-mdb-toggle="tab"
+        role="tab"
+        (click)="changeTab(1)"
+        aria-controls="v-tabs-home"
+        aria-selected="true"
+        translate>
+        profile.content1.title
+      </a>
+      <a
+        class="nav-link"
+        [ngClass]="selectedTab == 2 ? 'active' : ''"
+        data-mdb-toggle="tab"
+        role="tab"
+        (click)="changeTab(2)"
+        aria-controls="v-tabs-profile"
+        aria-selected="false"
+        translate>
+        profile.content2.title
+      </a>
+      <a
+        class="nav-link"
+        [ngClass]="selectedTab == 3 ? 'active' : ''"
+        data-mdb-toggle="tab"
+        role="tab"
+        (click)="changeTab(3)"
+        aria-controls="v-tabs-messages"
+        aria-selected="false"
+        translate>
+        profile.content3.title
+      </a>
+
+      <a
+        class="nav-link"
+        [ngClass]="selectedTab == 4 ? 'active' : ''"
+        data-mdb-toggle="tab"
+        role="tab"
+        (click)="changeTab(4)"
+        aria-controls="v-tabs-messages"
+        aria-selected="false"
+        translate>
+        profile.content4.title
+      </a>
+    </div>
+  </div>
+
+  <div class="col-9">
+    <div class="tab-content" id="v-tabs-tabContent">
+      <div
+        class="tab-pane fade"
+        [ngClass]="selectedTab == 1 ? 'active show' : ''"
+        role="tabpanel"
+        aria-labelledby="v-tabs-home-tab"
+      >
+        <h6 class="aquaColor" translate> profile.content1.fullName</h6>
+        <p class=" p-2">{{this.util.getCurrentUser().fullName}}</p>
+
+        <h6 class="aquaColor" translate>profile.content1.personalData</h6>
+        <div class="form-group row p-1">
+          <label for="birthDate" class="col-sm-4 col-form-label" translate>profile.content1.birthDate</label>
+          <div class="col-sm-6">
+            <span id="birthDate">{{this.util.getCurrentUser()?.personDto?.birthDate}}</span>
+          </div>
+        </div>
+        <div class="form-group row p-1">
+          <label for="gender" class="col-sm-4 col-form-label" translate>profile.content1.gender</label>
+          <div class="col-sm-6">
+            <span id="gender">{{this.util.getCurLang() == 'kz' ? this.util.getCurrentUser()?.personDto?.genderKz : this.util.getCurrentUser()?.personDto?.genderRu}}</span>
+          </div>
+        </div>
+        <div class="form-group row p-1">
+          <label for="address" class="col-sm-4 col-form-label" translate>profile.content1.address</label>
+          <div class="col-sm-6">
+            <span id="address">{{this.util.getCurrentUser()?.personDto?.address}}</span>
+          </div>
+        </div>
+      </div>
+      <div
+        class="tab-pane fade"
+        [ngClass]="selectedTab == 2 ? 'active show' : ''"
+        role="tabpanel"
+        aria-labelledby="v-tabs-profile-tab"
+      >
+        <h5 class="aquaColor" translate> profile.content2.title</h5>
+        <div class="form-group row p-1">
+          <label for="email" class="col-sm-4 col-form-label" translate>profile.content1.email</label>
+          <div class="col-sm-6">
+            <span id="email">{{this.util.getCurrentUser().email}}</span>
+          </div>
+        </div>
+        <div class="form-group row p-1">
+          <label for="phone" class="col-sm-4 col-form-label" translate>profile.content1.phone</label>
+          <div class="col-sm-6">
+            <span id="phone">{{this.util.getCurrentUser().phone | mask: '(000) 000-0000'}}</span>
+          </div>
+        </div>
+      </div>
+      <div
+        class="tab-pane fade"
+        [ngClass]="selectedTab == 3 ? 'active show' : ' '"
+        role="tabpanel"
+        aria-labelledby="v-tabs-messages-tab"
+      >
+        <h5 class="aquaColor" translate>profile.content3.title</h5>
+        <form [formGroup]="appForm">
+          <div class="form-group row p-1">
+            <label class="col-sm-4 col-form-label" translate>profile.content3.currentPassword</label>
+            <div class="col-sm-6">
+              <input type="Password" class="form-control" formControlName="password">
+            </div>
+          </div>
+          <div class="form-group row p-1">
+            <label class="col-sm-4 col-form-label" translate>profile.content3.newPassword</label>
+            <div class="col-sm-6">
+              <input type="Password" class="form-control" formControlName="newPassword">
+            </div>
+          </div>
+          <div class="form-group row p-1">
+            <label class="col-sm-4 col-form-label" translate>profile.content3.renewPassword</label>
+            <div class="col-sm-6">
+              <input type="Password" class="form-control" formControlName="reNewPassword">
+            </div>
+          </div>
+          <div class="form-group row p-1">
+            <div class="col-sm-12 float-end">
+              <button type="button" class="btn btn-primary" translate>profile.content3.save</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div
+        class="tab-pane fade"
+        [ngClass]="selectedTab == 4 ? 'active show' : ' '"
+        role="tabpanel"
+        aria-labelledby="v-tabs-messages-tab"
+      >
+        <h5 class="aquaColor" translate>profile.content4.title</h5>
+        <table class="table overflow-auto table-striped">
+          <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col" translate>profile.content4.title</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tbody style="cursor: pointer">
+          <tr *ngFor="let node of actData;let i = index">
+            <td>{{node.id}}</td>
+            <td>{{util.getCurLang() == 'kz' ? node.nameKz : node.nameRu}}</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <pagination [(ngModel)]="currentPage"
+                    [totalItems]="totalItems"
+                    [itemsPerPage]="itemsPerPage"
+                    [maxSize]="10"
+                    [rotate]="true"
+                    [boundaryLinks]="true"
+                    previousText="&lsaquo;"
+                    nextText="&rsaquo;"
+                    firstText="&laquo;"
+                    lastText="&raquo;"
+                    (pageChanged)="pageChanged($event)">
+        </pagination>
+      </div>
+
+    </div>
+  </div>
+</div>

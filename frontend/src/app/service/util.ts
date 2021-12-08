@@ -69,7 +69,7 @@ export class Util {
   }
 
   getCurLang() {
-    return this.nvl(this.getItem('lang'), 'ru')
+    return this.nvl(this.getItem('lang'), 'kz')
   }
 
   getError() {

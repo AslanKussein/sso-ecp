@@ -1,8 +1,9 @@
 import {Component, OnDestroy, OnInit, TemplateRef} from '@angular/core';
 import {SystemService} from "../../service/system.service";
 import {Subscription} from "rxjs";
-import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import {BsModalService, BsModalRef} from 'ngx-bootstrap/modal';
 import {NotificationService} from "../../service/notification.service";
+import {a} from "@angular/core/src/render3";
 
 @Component({
   selector: 'app-add-system',
@@ -12,29 +13,27 @@ import {NotificationService} from "../../service/notification.service";
 export class AddSystemComponent implements OnInit, OnDestroy {
   subscriptions: Subscription = new Subscription();
 
-  actData: any = [
-    {id: 1, name: 'e-maket', description: 'Пенсия'},
-    {id: 2, name: 'ЦБД', description: 'Пенсия'},
-    {id: 3, name: 'ООП', description: 'Пенсия'},
-  ];
+  actData: any = [];
   edData: any;
   loading: any;
   modalRef!: BsModalRef;
 
   constructor(private systemService: SystemService,
               private notifyService: NotificationService,
-              private modalService: BsModalService) { }
+              private modalService: BsModalService) {
+  }
 
   ngOnInit(): void {
     this.getSystems();
+
   }
 
   getSystems() {
     this.loading = true;
-    // this.systemService.getAll()
-    //   .subscribe(res => {
-    //     this.actData = res;
-    //   });
+    this.systemService.getAll()
+      .subscribe(res => {
+        this.actData = res;
+      });
     this.loading = false;
   }
 
@@ -52,7 +51,7 @@ export class AddSystemComponent implements OnInit, OnDestroy {
   }
 
   save() {
-    this.notifyService.showInfo('','');
+    this.notifyService.showInfo('', '');
     this.modalRef.hide();
   }
 

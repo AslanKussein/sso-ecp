@@ -1,23 +1,22 @@
 package kz.mtszn.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.UpdateTimestamp;
+import lombok.*;
+import org.hibernate.Hibernate;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.Instant;
+import java.time.ZonedDateTime;
+import java.util.Objects;
 
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
+@ToString
 @Entity
 @Table(name = "block_user", schema = "solidary")
 public class BlockUser implements Serializable {
@@ -28,5 +27,19 @@ public class BlockUser implements Serializable {
     @Id
     private Long empId;
     private Long failurecounter;
-    private Instant blockDate;
+    private ZonedDateTime blockDate;
+    private String ip;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        BlockUser blockUser = (BlockUser) o;
+        return Objects.equals(empId, blockUser.empId);
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
+    }
 }

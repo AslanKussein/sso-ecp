@@ -28,7 +28,28 @@ export class UserService {
   }
 
   unlockUser(id: number): Observable<any> {
-    return this.http.post<any>(`${this.configService.apiUrl}/users/unlockUser/`.concat(String(id)), {}).pipe(
+    return this.http.post<any>(`${this.configService.apiUrl}/users/unlockUser/${id}`, {}).pipe(
+      tap(),
+      catchError(UserService.handleError)
+    );
+  }
+
+  getAllAction(obj: any): Observable<any> {
+    return this.http.post(`${this.configService.apiUrl}/users/getAllAction`, obj).pipe(
+      tap(),
+      catchError(UserService.handleError)
+    );
+  }
+
+  getUserRole(obj: any): Observable<any> {
+    return this.http.post(`${this.configService.apiUrl}/users/getUserRole`, obj).pipe(
+      tap(),
+      catchError(UserService.handleError)
+    );
+  }
+
+  changePassword(obj: any): Observable<any> {
+    return this.http.put(`${this.configService.apiUrl}/users/getAllAction`, obj).pipe(
       tap(),
       catchError(UserService.handleError)
     );

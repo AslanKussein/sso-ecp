@@ -8,11 +8,9 @@ import {User} from "../../models/users";
   styleUrls: ['./footer.component.scss']
 })
 export class FooterComponent implements OnInit {
-  currentUser!: User;
   year: any;
 
-  constructor(private authenticationService: AuthenticationService) {
-    this.authenticationService.currentUser.subscribe(x => this.currentUser = x);
+  constructor() {
   }
 
   ngOnInit(): void {

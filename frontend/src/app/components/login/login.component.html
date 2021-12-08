@@ -14,25 +14,12 @@
               <p class="vitrina text-center" translate>footer.companyFullName</p>
             </div>
           </div>
-          <div class="row my-0">
+          <div class="row">
             <div class="col-sm">
               <ul class="nav nav-tabs" id="ex1" role="tablist">
                 <li class="nav-item" role="presentation">
                   <a
-                    class="nav-link panel-header"
-                    [ngClass]="selectedTab == 1 ? 'active' : ''"
-                    data-mdb-toggle="tab"
-                    role="tab"
-                    aria-controls="ex1-tabs-1"
-                    aria-selected="true"
-                    (click)="selectTab(1)"
-                    translate
-                  >login.loginPassword</a
-                  >
-                </li>
-                <li class="nav-item" role="presentation">
-                  <a
-                    class="nav-link"
+                    class="nav-link acceptCondition"
                     [ngClass]="selectedTab == 2 ? 'active' : ''"
                     data-mdb-toggle="tab"
                     role="tab"
@@ -41,6 +28,19 @@
                     (click)="selectTab(2)"
                     translate
                   >login.ecp</a
+                  >
+                </li>
+                <li class="nav-item" role="presentation">
+                  <a
+                    class="nav-link panel-header acceptCondition"
+                    [ngClass]="selectedTab == 1 ? 'active' : ''"
+                    data-mdb-toggle="tab"
+                    role="tab"
+                    aria-controls="ex1-tabs-1"
+                    aria-selected="true"
+                    (click)="selectTab(1)"
+                    translate
+                  >login.loginPassword</a
                   >
                 </li>
               </ul>
@@ -54,10 +54,11 @@
                 >
                   <div class="row">
                     <div class="col-sm">
-                      <label class="montserrat-label" translate>login.username</label>
+                      <label class="montserrat-label acceptCondition" translate>login.username</label>
                       <div class="input-group margin-bottom-sm mb-3">
                         <span class="input-group-addon"><i class="fa fa-user montserrat-icon"></i></span>
-                        <input class="form-control" type="text" formControlName="username" (keyup.enter)="login()">
+                        <input class="form-control acceptCondition" type="text" formControlName="username"
+                               (keyup.enter)="login()">
                       </div>
                       <div *ngIf="f.username.touched && f.username.invalid"
                            class="text-danger text-center errText">
@@ -68,10 +69,10 @@
 
                   <div class="row">
                     <div class="col-sm">
-                      <label class="montserrat-label" translate>login.password</label>
+                      <label class="montserrat-label acceptCondition" translate>login.password</label>
                       <div class="input-group margin-bottom-sm mb-3">
                         <span class="input-group-addon"><i class="fa fa-key montserrat-icon"></i></span>
-                        <input type="password" class="form-control" #x aria-label="password"
+                        <input type="password" class="form-control acceptCondition" #x aria-label="password"
                                aria-describedby="basic-addon2" formControlName="password" (keyup.enter)="login()">
                       </div>
                       <div *ngIf="f.password.touched && f.password.invalid"
@@ -83,27 +84,26 @@
                 </div>
                 <div class="tab-pane fade my-2" id="ex1-tabs-2" role="tabpanel" aria-labelledby="ex1-tab-2"
                      [ngClass]="selectedTab == 2 ? 'active show' : ''">
-                  <div class="row">
-                    <div class="col-sm">
-                      <input type="hidden" id="certificate" formControlName="certificate"/>
-                      <div class="input-group margin-bottom-sm mb-3">
-                        <button type="button" class="btn btn-primary choose-ecp" [disabled]="!loginForm.value.accept" (click)="checkCert(this)" translate>
-                          login.chooseEcp
-                        </button>
-                      </div>
+                  <div class="col-sm">
+                    <input type="hidden" id="certificate" formControlName="certificate"/>
+                    <div class="input-group margin-bottom-sm mb-3">
+                      <button type="button" class="btn btn-primary choose-ecp acceptCondition"
+                              [disabled]="!loginForm.value.accept" (click)="checkCert(this)" translate>
+                        login.chooseEcp
+                      </button>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="row my-0">
+            <div class="row">
+              <p *ngIf="selectedTab == 1" translate>login.errTry<span>- {{authenticationService.counter}}</span></p>
               <div class="col-sm-1"></div>
               <div class="row">
-                <div class="col-sm-1"></div>
                 <div class="col-sm">
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" formControlName="accept">
-                    <a class="col-sm-12 cursor-pointer" (click)="openModal(template)" translate>
+                    <a class="col-sm-12 cursor-pointer acceptCondition" (click)="openModal(template)" translate>
                       login.acceptCondition
                     </a>
                   </div>
@@ -111,28 +111,49 @@
                     <div *ngIf="f.accept.errors.required" translate>login.acceptUserAgreements</div>
                   </div>
                 </div>
-                <div class="col-sm-1"></div>
               </div>
               <div class="row">
-                <div class="col-sm-1"></div>
                 <div class="col-sm">
-                  <select class="form-select" formControlName="lang" (change)="changeLang()">
+                  <select class="form-select acceptCondition" formControlName="lang" (change)="changeLang()">
                     <option [value]="i.code" *ngFor="let i of mySelect">{{i.value}}</option>
                   </select>
                 </div>
                 <div class="col-sm">
-                  <button class="btn float-right color-aqua text-white btn-block enter-btn"
+                  <button class="btn float-right color-aqua text-white btn-block enter-btn acceptCondition"
                           [disabled]="!this.loginForm.valid"
                           *ngIf="selectedTab == 1"
                           (click)="login()" translate>
                     login.login
                   </button>
                 </div>
-                <div class="col-sm-1"></div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm-12">
+                  <p class="red-color acceptCondition" translate>login.userAcceptedTxt</p>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm-6">
+                  <a href="https://cert.gov.kz/" target="_blank">
+                    <img [src]="imgPath" style="margin: 0 auto; max-width:12.25rem; max-height: 4.25rem"/>
+                  </a>
+                </div>
+                <div class="col-sm-6">
+                  <a href="https://sts.kz/" target="_blank">
+                    <img [src]="imgPath1" style="margin: 0 auto; max-width:12.25rem; max-height: 4.25rem"/>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
+      <div class="row my-2">
+        <a class="text-center" (click)="openModal(template2)">
+          <label class="cursor-pointer" translate>login.support.call</label>
+        </a>
       </div>
     </div>
     <ng-template #template>
@@ -146,4 +167,33 @@
         login.userAgree
       </div>
     </ng-template>
+
+    <ng-template #template2>
+      <div class="modal-header">
+        <h4 class="modal-title pull-left" translate>login.support.title</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+          <span aria-hidden="true" class="text-danger">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" translate>
+        <table class="table  table-striped">
+          <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col" translate>login.support.department</th>
+            <th scope="col" translate>login.support.contacts</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tbody style="cursor: pointer">
+          <tr *ngFor="let node of contactData;let i = index">
+            <td>{{node.id}}</td>
+            <td>{{util.getCurLang() == 'kz' ? node.nameKz : node.nameRu}}</td>
+            <td>{{util.getCurLang() == 'kz' ? node.contactKz : node.contactRu}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </ng-template>
   </div>
+</div>
