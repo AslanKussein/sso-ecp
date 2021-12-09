@@ -46,7 +46,6 @@ public class SignRestController {
         }
     }
 
-
     @ApiOperation(value = "", notes = "check validate jwt token", response = UserTokenState.class)
     @PostMapping("/validateToken")
     public ResponseEntity<UserTokenState> validateToken(@RequestBody final TokenRequestDto dto) {

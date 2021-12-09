@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 @CrossOrigin(origins = "*") //this line
 
 @RequiredArgsConstructor
@@ -70,6 +71,16 @@ public class SystemRestController {
         return ResponseEntity.ok(appService.editSystem(id, dto));
     }
 
+    @ApiOperation(value = "", notes = "Удаляем систему", response = SystemDto.class, authorizations = {
+            @Authorization(value = "bearer-key")}, tags = {})
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "OK"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = ErrorDto.class)})
+    @DeleteMapping("/remove/{id}")
+    public ResponseEntity<Void> removeSystem(@PathVariable("id") final Long id) {
+        appService.remove(id);
+        return ResponseEntity.noContent().build();
+    }
 
     @ApiOperation(value = "", notes = "Переход в систему", response = void.class, authorizations = {
             @Authorization(value = "bearer-key")}, tags = {})

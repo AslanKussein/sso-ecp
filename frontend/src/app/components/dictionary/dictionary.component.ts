@@ -5,6 +5,8 @@ import {BsModalRef, BsModalService} from "ngx-bootstrap/modal";
 import {Subscription} from "rxjs";
 import {NgxUiLoaderService} from "ngx-ui-loader";
 import {Util} from "../../service/util";
+import {FormBuilder, Validators} from "@angular/forms";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-dictionary',
@@ -17,14 +19,16 @@ export class DictionaryComponent implements OnInit, OnDestroy {
   selectedDic: string = 'systems';
   actData: any;
   modalRef!: BsModalRef;
-  edData: any;
   dAlias!: any;
   blockUserList!: any;
+  systemForm: any;
 
   constructor(private systemService: SystemService,
               private notifyService: NotificationService,
               private modalService: BsModalService,
               private util: Util,
+              private translate: TranslateService,
+              private formBuilder: FormBuilder,
               private ngxLoader: NgxUiLoaderService) {
   }
 
@@ -34,6 +38,13 @@ export class DictionaryComponent implements OnInit, OnDestroy {
       this.getDAlias();
       this.getBlockUserList();
     }
+
+    this.systemForm = this.formBuilder.group({
+      id: ['', Validators.nullValidator],
+      name: ['', Validators.required],
+      url: ['', Validators.required],
+      aliasCode: ['', Validators.required]
+    });
   }
 
   getSystems() {
@@ -55,8 +66,18 @@ export class DictionaryComponent implements OnInit, OnDestroy {
     }
   }
 
+  setValue(controlName: string, value: any) {
+    this.systemForm.controls[controlName].setValue(value);
+    this.systemForm.controls[controlName].updateValueAndValidity();
+  }
+
   editData(data: any) {
-    this.edData = data;
+    this.setValue('id', data.id);
+    this.setValue('name', data.name);
+    this.setValue('url', data.url);
+    this.setValue('aliasCode', data.aliasCode);
+
+    console.log(this.systemForm)
   }
 
   openModal(template: TemplateRef<any>) {
@@ -68,8 +89,16 @@ export class DictionaryComponent implements OnInit, OnDestroy {
   }
 
   saveSystems() {
+    if (this.systemForm.value.id == null) {
+      this.createSystem();
+    } else {
+      this.updateSystems();
+    }
+  }
+
+  createSystem() {
     this.ngxLoader.startBackground();
-    this.subscriptions.add(this.systemService.edit(this.edData.id, this.edData)
+    this.subscriptions.add(this.systemService.create(this.systemForm?.value)
       .subscribe(res => {
         this.getSystems();
         this.notifyService.showInfo('Успешно', '');
@@ -80,8 +109,17 @@ export class DictionaryComponent implements OnInit, OnDestroy {
       }));
   }
 
-  remove() {
-    this.modalRef.hide();
+  updateSystems() {
+    this.ngxLoader.startBackground();
+    this.subscriptions.add(this.systemService.edit(this.systemForm.value.id, this.systemForm?.value)
+      .subscribe(res => {
+        this.getSystems();
+        this.notifyService.showInfo('Успешно', '');
+        this.modalRef.hide();
+        this.ngxLoader.stopBackground()
+      }, () => {
+        this.ngxLoader.stopBackground()
+      }));
   }
 
   getDAlias() {
@@ -118,5 +156,25 @@ export class DictionaryComponent implements OnInit, OnDestroy {
         this.ngxLoader.stopBackground()
       })
     )
+  }
+
+  createNewSystem() {
+    this.systemForm.reset();
+  }
+
+
+  removeSystem(data: any) {
+    if (confirm(this.translate.instant('dic.confirmRemove') + " " + data.name + " ?")) {
+      this.ngxLoader.startBackground();
+      this.subscriptions.add(this.systemService.remove(data.id)
+        .subscribe(res => {
+          this.getSystems();
+          this.notifyService.showInfo('Успешно', '');
+          this.modalRef.hide();
+          this.ngxLoader.stopBackground()
+        }, () => {
+          this.ngxLoader.stopBackground()
+        }));
+    }
   }
 }

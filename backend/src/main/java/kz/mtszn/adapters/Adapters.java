@@ -14,7 +14,6 @@ public class Adapters {
                 .id(scanner.getLong("ID"))
                 .name(scanner.getString("SYSTEM_NAME"))
                 .url(scanner.getString("URL"))
-                .urlEtc(scanner.getString("URL_ETC"))
                 .build();
     }
 

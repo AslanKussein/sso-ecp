@@ -67,7 +67,6 @@ public class SystemServiceImpl implements SystemService {
                 .id(systems.getId())
                 .name(systems.getName())
                 .url(systems.getUrl())
-                .urlEtc(systems.getUrl_etc())
                 .aliasCode(systems.getAliasCode())
                 .build();
     }
@@ -77,7 +76,10 @@ public class SystemServiceImpl implements SystemService {
         Systems systems = new Systems();
         systems.setName(dto.getName());
         systems.setUrl(dto.getUrl());
-        systems.setUrl_etc(dto.getUrlEtc());
+        systems.setAliasCode(dto.getAliasCode());
+
+        systems = systemsRepository.save(systems);
+
         return wrapper(systems);
     }
 
@@ -86,10 +88,15 @@ public class SystemServiceImpl implements SystemService {
         Systems systems = systemsRepository.getOne(id);
         systems.setName(dto.getName());
         systems.setUrl(dto.getUrl());
-        systems.setUrl_etc(dto.getUrlEtc());
         systems.setAliasCode(dto.getAliasCode());
         systems = systemsRepository.save(systems);
         return wrapper(systems);
+    }
+
+    @Override
+    public void remove(final Long id) {
+        Systems systems = systemsRepository.getOne(id);
+        systemsRepository.delete(systems);
     }
 
     @Override

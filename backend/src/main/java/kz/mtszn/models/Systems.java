@@ -3,10 +3,7 @@ package kz.mtszn.models;
 import lombok.*;
 import org.hibernate.Hibernate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
@@ -24,6 +21,8 @@ public class Systems implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @GeneratedValue(generator = "Systems_id_generator")
+    @SequenceGenerator(name = "Systems_id_generator", sequenceName = "SOLIDARY.SEQ_D_SSO_SYSTEMS", allocationSize = 1)
     private Long id;
     @Column(name = "system_name")
     private String name;

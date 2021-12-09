@@ -16,6 +16,8 @@ public interface SystemService {
 
     SystemDto editSystem(final Long id, final SystemDto dto);
 
+    void remove(Long id);
+
     void redirectSystem(final Long empId, final String userName, final SystemDto systemDto);
 
     List<DAlias> getDAlias();

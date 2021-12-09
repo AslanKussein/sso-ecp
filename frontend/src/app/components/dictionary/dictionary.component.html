@@ -2,27 +2,32 @@
   <div class="row ">
     <div class="col-sm-4">
       <ul class="list-group">
-        <!--        <li class="list-group-item" [ngClass]="selectedDic == 'total' ? 'active' : ''"-->
-        <!--            (click)="setSelectedDic('total')" translate>dic.total-->
-        <!--        </li>-->
         <li class="list-group-item" [ngClass]="selectedDic == 'systems' ? 'active' : ''"
             (click)="setSelectedDic('systems')" translate>data.availableSystems
         </li>
         <li class="list-group-item" [ngClass]="selectedDic == 'authType' ? 'active' : ''"
             (click)="setSelectedDic('authType')" translate>dic.blockUser <span
-          class="badge bg-danger ms-2">{{blockUserList.length}}</span>
+          class="badge bg-danger ms-2">{{blockUserList?.length}}</span>
         </li>
       </ul>
     </div>
     <div class="col-sm" *ngIf="selectedDic == 'systems'">
-      <!--      <button class="btn btn-primary" type="button" (click)="openModal(template)">Добавить систему</button>-->
+      <div class="row my-2">
+        <div class="col-sm-9"></div>
+        <div class="col-sm-2">
+          <button class="btn btn-primary float-end btn-sm mb-2" (click)="openModal(template); createNewSystem()" translate>dic.add
+          </button>
+        </div>
+        <div class="col-sm-1"></div>
+      </div>
       <table class="table overflow-auto table-striped">
         <thead>
         <tr>
           <th scope="col">ID</th>
           <th scope="col" translate>dic.name</th>
           <th scope="col" translate>URL</th>
-          <th scope="col" translate>dic.action</th>
+          <th scope="col" translate></th>
+          <th scope="col" translate></th>
         </tr>
         </thead>
         <tbody>
@@ -34,12 +39,14 @@
           <td class="edit-action" (click)="editData(node);openModal(template)">
             <i aria-hidden="true" class="fa fa-pen"> </i>
           </td>
+          <td class="edit-action text-danger" (click)="removeSystem(node);">
+            <i aria-hidden="true" class="fa fa-trash"> </i>
+          </td>
         </tr>
         </tbody>
       </table>
     </div>
     <div class="col-sm" *ngIf="selectedDic == 'authType'">
-      <!--      <button class="btn btn-primary" type="button" (click)="openModal(template)">Добавить систему</button>-->
       <table class="table overflow-auto table-striped">
         <thead>
         <tr>
@@ -72,38 +79,32 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body">
+  <div class="modal-body" [formGroup]="systemForm">
     <div class="row">
       <div class="col-sm">
         <label class="col-sm col-form-label" translate>dic.name<span class="text-danger">&nbsp;*</span></label>
-        <input type="text" class="col-sm form-control" [(ngModel)]="edData.name"/>
+        <input type="text" class="col-sm form-control" formControlName="name"/>
       </div>
     </div>
     <div class="row">
       <div class="col-sm">
         <label class="col-sm col-form-label">URL</label>
-        <textarea class="col-sm form-control" [(ngModel)]="edData.url"></textarea>
+        <textarea class="col-sm form-control" formControlName="url"></textarea>
       </div>
     </div>
-    <div class="row">
-      <div class="col-sm">
-        <label class="col-sm col-form-label">URL (ETS)</label>
-        <textarea class="col-sm form-control" [(ngModel)]="edData.urlEtc"></textarea>
-      </div>
-    </div>
+
     <div class="row">
       <div class="col-sm">
         <label class="col-sm col-form-label" translate>dic.systemCode</label>
         <ng-select [items]="dAlias"
                    bindLabel="nameRu"
                    bindValue="code"
-                   [(ngModel)]="edData.aliasCode">
+                   formControlName="aliasCode">
         </ng-select>
       </div>
     </div>
   </div>
   <div class="modal-footer">
-    <!--    <button class="btn btn-primary float-end" (click)="remove()">Удалить</button>-->
     <button class="btn btn-primary float-end" (click)="saveSystems()" translate>dic.save</button>
   </div>
 </ng-template>

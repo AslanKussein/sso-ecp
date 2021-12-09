@@ -8,7 +8,6 @@ import {FooterComponent} from './components/footer/footer.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {DataComponent} from './components/data/data.component';
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
-import {AddSystemComponent} from './components/add-system/add-system.component';
 import {LoginComponent} from "./components/login/login.component";
 import {NgxUiLoaderConfig, NgxUiLoaderModule, PB_DIRECTION, POSITION, SPINNER} from 'ngx-ui-loader';
 import {ToastrModule} from 'ngx-toastr';
@@ -63,7 +62,6 @@ export function HttpLoaderFactory(httpClient: any) {
     HeaderComponent,
     FooterComponent,
     DataComponent,
-    AddSystemComponent,
     LoginComponent,
     DictionaryComponent,
     SettingsComponent,

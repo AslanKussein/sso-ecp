@@ -31,8 +31,26 @@ export class SystemService {
       );
   }
 
+  public create(data: any): Observable<any> {
+    return this.http.post(`${this.configService.apiUrl}/systems/create`, data)
+      .pipe(
+        tap(data => {
+        }),
+        catchError(SystemService.handleError)
+      );
+  }
+
   public edit(id: number, data: any): Observable<any> {
     return this.http.put(`${this.configService.apiUrl}/systems/${id}`, data)
+      .pipe(
+        tap(data => {
+        }),
+        catchError(SystemService.handleError)
+      );
+  }
+
+  public remove(id: number): Observable<any> {
+    return this.http.delete(`${this.configService.apiUrl}/systems/remove/${id}`, {})
       .pipe(
         tap(data => {
         }),

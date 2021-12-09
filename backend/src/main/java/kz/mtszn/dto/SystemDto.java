@@ -17,6 +17,5 @@ public class SystemDto implements Serializable {
     private Long id;
     private String name;
     private String url;
-    private String urlEtc;
     private String aliasCode;
 }

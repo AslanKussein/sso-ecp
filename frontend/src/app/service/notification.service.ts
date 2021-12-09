@@ -26,7 +26,6 @@ export class NotificationService {
     this.toastr.warning(message, title)
   }
 
-
   error(message: any, title: any) {
     this.toastr.error(message, title, {timeOut: 15000})
   }
